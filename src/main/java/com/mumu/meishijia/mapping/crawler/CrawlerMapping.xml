@@ -1,0 +1,23 @@
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mumu.meishijia.dao.crawler.ICrawlerDao">
+    <insert id="insertCategory" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        category(`level`, `name`)
+        VALUES
+        <foreach collection="list" item="name" index="index" separator=",">
+            (1, #{name})
+        </foreach>
+    </insert>
+    <insert id="insertFood" parameterType="com.mumu.meishijia.pojo.crawler.Food">
+        INSERT INTO
+        food(food_name, food_image, category, com_score, comments, great_com, good_com, notbad_com, food_makes, author, summary, material, food_make_way, tips)
+        VALUES
+        (#{foodName}, #{foodImage}, #{category}, #{comScore}, #{comments}, #{greatCom}, #{goodCom}, #{notBadCom}, #{foodMakes}, #{author}, #{summary}, #{material},
+        #{foodMakeWay}, #{tips})
+    </insert>
+</mapper>
