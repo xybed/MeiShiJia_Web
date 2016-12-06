@@ -28,9 +28,9 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     private ICrawlerDao crawlerDao;
 
     private List<Food> foods = new ArrayList<Food>();
-    private String savePath = "\\images\\jiachang\\";
-    private String savePathWay = "\\images\\jiachang\\makeway\\";
-    private int cid = 1;
+    private String savePath = "\\images\\kuaishou\\";
+    private String savePathWay = "\\images\\kuaishou\\makeway\\";
+    private int cid = 2;
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -63,11 +63,10 @@ public class CrawlerService extends BaseService implements ICrawlerService{
 
     public void forPage(){
         String url;
-        for(int i=6;i<11;i++){
-            url = "http://www.xiachufang.com/category/40076/?page="+i;
+        for(int i=2;i<11;i++){
+            url = "http://www.xiachufang.com/category/40077/?page="+i;
             getDetailUrl(url);
         }
-//        getDetail("http://www.xiachufang.com/recipe/182788/");
     }
 
     /**
@@ -97,9 +96,6 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                         .attr("abs:href");
                 detailUrls.add(detailUrl);
             }
-//            for(int i=0;i<19;i++){
-//                detailUrls.remove(0);
-//            }
             for(String detailUrl : detailUrls){
                 getDetail(detailUrl);
             }
@@ -191,6 +187,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             Elements summaryElm = divBlock.select("div.desc");
             if(summaryElm != null && summaryElm.size() != 0){
                 String summary = summaryElm.first().text();
+                summary = StringUtil.filterUtf8mb4(summary);
                 System.out.println("简介："+summary);
                 food.setSummary(summary);
             }else{
@@ -259,11 +256,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                 for(Element li : lis){
                     FoodMakeWayGson foodMakeWayGson = new FoodMakeWayGson();
                     String text = li.select("p").first().text();
-//                    if(text.contains("准备卤水配料")){
-//                        text = text.substring(0, text.length() - 2);
-//                    }else if(text.contains("出锅前")){
-//                        text = text.substring(0, text.indexOf("出锅前")-4)+text.substring(text.indexOf("出锅前"), text.length());
-//                    }
+                    text = StringUtil.filterUtf8mb4(text);
                     System.out.print(text);
                     foodMakeWayGson.setText(text);
                     //做法的图片的url
@@ -303,6 +296,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             Elements tipsElm = divBlock.select("div.tip-container");
             if(tipsElm != null && tipsElm.size() != 0){
                 String tips = tipsElm.select("div.tip").first().text();
+                tips = StringUtil.filterUtf8mb4(tips);
                 System.out.println("小贴士："+tips);
                 food.setTips(tips);
             }else {

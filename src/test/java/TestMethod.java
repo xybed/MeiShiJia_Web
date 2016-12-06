@@ -33,4 +33,11 @@ public class TestMethod {
         Gson gson = new Gson();
         System.out.print(gson.toJson(foodMaterialGsons));
     }
+
+    @Test
+    public void testChar(){
+        String str = "！！";
+        str = str.replaceAll("[^\\u0020-\\u9FA5]", "");
+        System.out.println(str);
+    }
 }

@@ -17,5 +17,12 @@ public class StringUtil {
         return s.trim().length() == 0;
     }
 
-
+    /**
+     * 去掉字符串中的4位中文编码，utf8最大是3位中文编码
+     * @param str
+     * @return
+     */
+    public static String filterUtf8mb4(String str){
+        return str.replaceAll("[^\\u0020-\\u9FA5]", "");
+    }
 }
