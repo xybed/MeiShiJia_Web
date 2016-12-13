@@ -16,6 +16,9 @@ public class FileUtil {
      * @param filePath 保存路径
      */
     public static void downloadImage(String urlString, String filePath){
+        File file = new File(filePath);
+        if(file.exists())
+            return;
         // 输入流
         InputStream is = null;
         // 输出的文件流
@@ -59,7 +62,7 @@ public class FileUtil {
     public static void mkdir(String filePath){
         File file = new File(filePath);
         if(!file.exists() && !file.isDirectory()){
-            file.mkdir();
+            file.mkdirs();
         }
     }
 }

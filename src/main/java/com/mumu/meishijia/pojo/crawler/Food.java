@@ -4,9 +4,9 @@ package com.mumu.meishijia.pojo.crawler;
  * Created by Administrator on 2016/11/24.
  */
 public class Food {
+    private String foodUrl;//食物的网上链接
     private String foodName;//食物名称
     private String foodImage;//图片地址
-    private int category;//分类级别，外键，关联category表
     private float comScore;//综合评分
     private int comments;//评论数
     private int greatCom;//极好数
@@ -18,6 +18,14 @@ public class Food {
     private String material;//用料
     private String foodMakeWay;//做法
     private String tips;//小贴士
+
+    public String getFoodUrl() {
+        return foodUrl;
+    }
+
+    public void setFoodUrl(String foodUrl) {
+        this.foodUrl = foodUrl;
+    }
 
     public String getFoodName() {
         return foodName;
@@ -33,14 +41,6 @@ public class Food {
 
     public void setFoodImage(String foodImage) {
         this.foodImage = foodImage;
-    }
-
-    public int getCategory() {
-        return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
     }
 
     public float getComScore() {

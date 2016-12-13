@@ -10,14 +10,20 @@
         category(`level`, `name`)
         VALUES
         <foreach collection="list" item="name" index="index" separator=",">
-            (1, #{name})
+            (3, #{name})
         </foreach>
     </insert>
     <insert id="insertFood" parameterType="com.mumu.meishijia.pojo.crawler.Food">
         INSERT INTO
-        food(food_name, food_image, category, com_score, comments, great_com, good_com, notbad_com, food_makes, author, summary, material, food_make_way, tips)
+        food(food_url, food_name, food_image, com_score, comments, great_com, good_com, notbad_com, food_makes, author, summary, material, food_make_way, tips)
         VALUES
-        (#{foodName}, #{foodImage}, #{category}, #{comScore}, #{comments}, #{greatCom}, #{goodCom}, #{notBadCom}, #{foodMakes}, #{author}, #{summary}, #{material},
+        (#{foodUrl}, #{foodName}, #{foodImage}, #{comScore}, #{comments}, #{greatCom}, #{goodCom}, #{notBadCom}, #{foodMakes}, #{author}, #{summary}, #{material},
         #{foodMakeWay}, #{tips})
+    </insert>
+    <select id="queryFoodByUrl" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM food WHERE food_url=#{foodUrl}
+    </select>
+    <insert id="insertFoodCategory" parameterType="com.mumu.meishijia.pojo.crawler.FoodCategory">
+        INSERT INTO food_category VALUES (#{foodId}, #{categoryId})
     </insert>
 </mapper>

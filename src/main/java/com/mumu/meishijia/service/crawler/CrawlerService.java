@@ -27,32 +27,33 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     @Resource
     private ICrawlerDao crawlerDao;
 
-    private List<Food> foods = new ArrayList<Food>();
-    private String savePath = "\\images\\kuaishou\\";
-    private String savePathWay = "\\images\\kuaishou\\makeway\\";
-    private int cid = 2;
+    private String savePath = "\\images\\remen\\caishi\\kuaishou\\";
+    private String savePathWay = "\\images\\remen\\caishi\\kuaishou\\makeway\\";
+    private int categoryId = 66;
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
-        String url = "http://www.xiachufang.com/";
+        String url = "http://www.xiachufang.com/category/";
         Document document;
         try {
             document = Jsoup.connect(url)
                     .timeout(10000)
                     .get();
-            Elements outer = document.select("div.page-outer");
-            Elements container = outer.select("div.page-container");
-            Elements pure = container.select("div.pure-g");
-            Element mainPanel = pure.first();
-            Elements pur = mainPanel.select("div.pure-g");
-            Element leftPanel = pur.first();
-            Elements ul = leftPanel.select("ul");
-            Elements lis = ul.select("li");
-            for(int i=0;i<lis.size();i++){
-                Element li = lis.get(i);
-                Element span = li.select("span.cat-name").first();
-                if(span != null && !StringUtil.isEmpty(span.text())){
-                    datas.add(span.text());
+            //一级分类
+            Elements catesOne = document.select("div.page-outer")
+                    .select("div.page-container")
+                    .select("div.white-bg")
+                    .select("div.cates-list");
+            for(Element cateOne : catesOne){
+                Elements catesThree = cateOne.select("div.cates-list-all").select("ul");
+                for(Element cateThree : catesThree){
+                    Elements lis = cateThree.select("li");
+                    if(lis != null && lis.size() > 0){
+                        for(Element li : lis){
+                            String category = li.select("a").first().text();
+                            datas.add(category);
+                        }
+                    }
                 }
             }
             crawlerDao.insertCategory(datas);
@@ -63,10 +64,11 @@ public class CrawlerService extends BaseService implements ICrawlerService{
 
     public void forPage(){
         String url;
-        for(int i=2;i<11;i++){
+        for(int i=1;i<11;i++){
             url = "http://www.xiachufang.com/category/40077/?page="+i;
             getDetailUrl(url);
         }
+//        getDetail("http://www.xiachufang.com/recipe/1064357/");
     }
 
     /**
@@ -97,7 +99,17 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                 detailUrls.add(detailUrl);
             }
             for(String detailUrl : detailUrls){
-                getDetail(detailUrl);
+                Integer result = crawlerDao.queryFoodByUrl(detailUrl);
+                if(result == null){
+                    //如果为空，则数据库里没有此数据
+                    getDetail(detailUrl);
+                }else{
+                    //如果不为空，则数据库里有，插入一条数据到food_category表中
+                    FoodCategory foodCategory = new FoodCategory();
+                    foodCategory.setFoodId(result);
+                    foodCategory.setCategoryId(categoryId);
+                    crawlerDao.insertFoodCategory(foodCategory);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,6 +123,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     private void getDetail(String url){
         System.out.println("访问详情链接："+url);
         Food food = new Food();
+        food.setFoodUrl(url);
         Document document;
         try {
             document = Jsoup.connect(url)
@@ -304,11 +317,14 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                 food.setTips("");
             }
 
-            //补齐其他数据
-            food.setCategory(cid);//烘焙的cid为10
-
             //插入数据库
             crawlerDao.insertFood(food);
+            int foodId = crawlerDao.queryFoodByUrl(url);
+            //补齐食物属于的分类表
+            FoodCategory foodCategory = new FoodCategory();
+            foodCategory.setFoodId(foodId);
+            foodCategory.setCategoryId(categoryId);
+            crawlerDao.insertFoodCategory(foodCategory);
 
         } catch (IOException e) {
             e.printStackTrace();

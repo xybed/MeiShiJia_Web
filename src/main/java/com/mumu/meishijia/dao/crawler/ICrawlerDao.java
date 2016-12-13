@@ -1,6 +1,7 @@
 package com.mumu.meishijia.dao.crawler;
 
 import com.mumu.meishijia.pojo.crawler.Food;
+import com.mumu.meishijia.pojo.crawler.FoodCategory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface ICrawlerDao {
     void insertCategory(List<String> names);
     void insertFood(Food food);
+    Integer queryFoodByUrl(String foodUrl);
+    void insertFoodCategory(FoodCategory foodCategory);
 }
