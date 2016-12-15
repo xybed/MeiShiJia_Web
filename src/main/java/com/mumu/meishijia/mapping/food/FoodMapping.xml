@@ -1,5 +1,11 @@
 <!DOCTYPE mapper PUBLIC
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mumu.meishijia.dao.crawler.ICrawlerDao">
+<mapper namespace="com.mumu.meishijia.dao.food.IFoodDao">
+    <select id="queryCategoryByLevel" parameterType="int" resultType="com.mumu.meishijia.pojo.food.CategoryIdAndName">
+        SELECT id,`name` FROM category WHERE `level`=#{level}
+    </select>
+    <select id="queryCategoryByFid" parameterType="int" resultType="com.mumu.meishijia.pojo.food.CategoryIdAndName">
+        SELECT id,`name` FROM category WHERE fid=#{fid}
+    </select>
 </mapper>

@@ -27,9 +27,10 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     @Resource
     private ICrawlerDao crawlerDao;
 
-    private String savePath = "\\images\\remen\\caishi\\kuaishou\\";
-    private String savePathWay = "\\images\\remen\\caishi\\kuaishou\\makeway\\";
-    private int categoryId = 66;
+    private String savePath = "\\images\\remen\\caishi\\chuangyi\\";
+    private String savePathWay = "\\images\\remen\\caishi\\chuangyi\\makeway\\";
+    private String url = "http://www.xiachufang.com/category/51940/?page=";
+    private int categoryId = 72;
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -64,11 +65,11 @@ public class CrawlerService extends BaseService implements ICrawlerService{
 
     public void forPage(){
         String url;
-        for(int i=1;i<11;i++){
-            url = "http://www.xiachufang.com/category/40077/?page="+i;
+        for(int i=3;i<11;i++){
+            url = this.url + i;
             getDetailUrl(url);
         }
-//        getDetail("http://www.xiachufang.com/recipe/1064357/");
+//        getDetail("http://www.xiachufang.com/recipe/78140/");
     }
 
     /**
@@ -108,7 +109,12 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                     FoodCategory foodCategory = new FoodCategory();
                     foodCategory.setFoodId(result);
                     foodCategory.setCategoryId(categoryId);
-                    crawlerDao.insertFoodCategory(foodCategory);
+                    try {
+                        crawlerDao.insertFoodCategory(foodCategory);
+                    } catch (Exception e){
+                        System.out.println(result+"，"+categoryId+"数据已有");
+                    }
+
                 }
             }
         } catch (IOException e) {
@@ -137,6 +143,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
 
             //拿食物名字
             String foodName = divMain.select("h1").first().text();
+            foodName = StringUtil.filterUtf8mb4(foodName);
             food.setFoodName(foodName);
             System.out.println("食物名字："+foodName);
 
@@ -218,6 +225,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             List<String> hsStr = new ArrayList<String>();
             for(Element h : hs){
                 String hstr = h.text().replaceAll("\u00A0", "");
+                hstr = StringUtil.filterUtf8mb4(hstr);
                 hsStr.add(hstr);
                 System.out.println(hstr);
             }
@@ -234,10 +242,12 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                     Elements tdNameElm = tr.select("td.name").select("a");
                     if(tdNameElm != null && tdNameElm.size() != 0){
                         String name = tdNameElm.first().text();
+                        name = StringUtil.filterUtf8mb4(name);
                         System.out.print(""+name);
                         foodMaterialGson.setName(name);
                     }else{
                         String name = tr.select("td.name").first().text();
+                        name = StringUtil.filterUtf8mb4(name);
                         System.out.print(""+name);
                         foodMaterialGson.setName(name);
                     }
@@ -324,7 +334,12 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             FoodCategory foodCategory = new FoodCategory();
             foodCategory.setFoodId(foodId);
             foodCategory.setCategoryId(categoryId);
-            crawlerDao.insertFoodCategory(foodCategory);
+            try {
+                crawlerDao.insertFoodCategory(foodCategory);
+            } catch (Exception e){
+                System.out.println(foodId+"，"+categoryId+"数据已有");
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
