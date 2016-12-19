@@ -2,7 +2,7 @@ package com.mumu.meishijia.controller.food;
 
 import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.model.BaseModel;
-import com.mumu.meishijia.model.food.RecipeModel;
+import com.mumu.meishijia.model.food.RecipeSubModel;
 import com.mumu.meishijia.service.food.IFoodService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +27,19 @@ public class FoodController extends BaseController{
     @ResponseBody
     public BaseModel getRecipe(HttpServletRequest request){
         //验证签名sign，保证请求的安全性
-//        String queryString = request.getQueryString();
-//        String sign = request.getParameter("sign");
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
         BaseModel baseModel = new BaseModel();
-//        if(!validateSign(queryString, sign)){
-//            baseModel.setResultType(-1);
-//            baseModel.setResultCode(-1);
-//            baseModel.setDetail("请求违法");
-//            return baseModel;
-//        }
-        List<RecipeModel> recipeModels = foodService.getRecipe();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+        List<RecipeSubModel> recipeSubModels = foodService.getRecipe();
         baseModel.setResultType(0);
         baseModel.setResultCode(0);
-        baseModel.setData(recipeModels);
+        baseModel.setData(recipeSubModels);
         baseModel.setDetail("请求成功");
         return baseModel;
     }

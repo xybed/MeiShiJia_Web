@@ -8,4 +8,7 @@
     <select id="queryCategoryByFid" parameterType="int" resultType="com.mumu.meishijia.pojo.food.CategoryIdAndName">
         SELECT id,`name` FROM category WHERE fid=#{fid}
     </select>
+    <select id="queryRecipe" parameterType="int" resultType="com.mumu.meishijia.pojo.food.CategoryIdAndName">
+        SELECT id,`name` FROM category WHERE `level`=#{level} limit 0,50
+    </select>
 </mapper>

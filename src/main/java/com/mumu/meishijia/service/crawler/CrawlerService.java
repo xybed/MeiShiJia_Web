@@ -27,10 +27,10 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     @Resource
     private ICrawlerDao crawlerDao;
 
-    private String savePath = "\\images\\remen\\caishi\\chuangyi\\";
-    private String savePathWay = "\\images\\remen\\caishi\\chuangyi\\makeway\\";
-    private String url = "http://www.xiachufang.com/category/51940/?page=";
-    private int categoryId = 72;
+    private String savePath = "\\images\\remen\\teshuchanghe\\zaocan\\";
+    private String savePathWay = "\\images\\remen\\teshuchanghe\\zaocan\\makeway\\";
+    private String url = "http://www.xiachufang.com/category/40071/?page=";
+    private int categoryId = 83;
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -65,7 +65,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
 
     public void forPage(){
         String url;
-        for(int i=3;i<11;i++){
+        for(int i=1;i<11;i++){
             url = this.url + i;
             getDetailUrl(url);
         }

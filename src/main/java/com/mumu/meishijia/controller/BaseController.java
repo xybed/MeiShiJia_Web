@@ -36,7 +36,7 @@ public class BaseController {
         Map<String, String> paramsMap = new HashMap<String, String>();
         if(strings.length > 0){
             for(int i=0;i<strings.length;i++){
-                if(strings[i].contains("="))
+                if(strings[i].contains("=") && !strings[i].startsWith("sign"))
                     paramsMap.put(strings[i].substring(0, strings[i].lastIndexOf("=")), "");
             }
         }

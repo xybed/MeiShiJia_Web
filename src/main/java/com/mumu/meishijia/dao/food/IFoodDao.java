@@ -12,4 +12,5 @@ import java.util.List;
 public interface IFoodDao {
     List<CategoryIdAndName> queryCategoryByLevel(int level);
     List<CategoryIdAndName> queryCategoryByFid(int fid);
+    List<CategoryIdAndName> queryRecipe(int level);
 }

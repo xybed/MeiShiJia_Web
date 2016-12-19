@@ -1,7 +1,6 @@
 package com.mumu.meishijia.service.food;
 
 import com.mumu.meishijia.dao.food.IFoodDao;
-import com.mumu.meishijia.model.food.RecipeModel;
 import com.mumu.meishijia.model.food.RecipeSubModel;
 import com.mumu.meishijia.pojo.food.CategoryIdAndName;
 import org.springframework.stereotype.Service;
@@ -19,28 +18,15 @@ public class FoodService implements IFoodService{
     @Resource
     private IFoodDao foodDao;
 
-    public List<RecipeModel> getRecipe() {
-        //先查询level为2的食谱分类
-        List<RecipeModel> recipeModels = new ArrayList<RecipeModel>();
-        List<CategoryIdAndName> levelTwos = foodDao.queryCategoryByLevel(2);
-        for(CategoryIdAndName levelTwo : levelTwos){
-            RecipeModel recipeModel = new RecipeModel();
-            recipeModel.setValue(levelTwo.getName());
-            List<CategoryIdAndName> levelThrees = foodDao.queryCategoryByFid(levelTwo.getId());
-            //可能二级分类没有子类
-            if(levelThrees == null || levelThrees.size() <= 0){
-                continue;
-            }
-            List<RecipeSubModel> recipeSubModels = new ArrayList<RecipeSubModel>();
-            for(CategoryIdAndName levelThree : levelThrees){
-                RecipeSubModel recipeSubModel = new RecipeSubModel();
-                recipeSubModel.setId(levelThree.getId());
-                recipeSubModel.setValue(levelThree.getName());
-                recipeSubModels.add(recipeSubModel);
-            }
-            recipeModel.setSub(recipeSubModels);
-            recipeModels.add(recipeModel);
+    public List<RecipeSubModel> getRecipe() {
+        List<CategoryIdAndName> categoryIdAndNames = foodDao.queryRecipe(3);
+        List<RecipeSubModel> recipeSubModels = new ArrayList<RecipeSubModel>();
+        for(CategoryIdAndName categoryIdAndName : categoryIdAndNames){
+            RecipeSubModel recipeSubModel = new RecipeSubModel();
+            recipeSubModel.setId(categoryIdAndName.getId());
+            recipeSubModel.setValue(categoryIdAndName.getName());
+            recipeSubModels.add(recipeSubModel);
         }
-        return recipeModels;
+        return recipeSubModels;
     }
 }
