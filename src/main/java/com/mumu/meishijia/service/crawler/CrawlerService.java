@@ -27,10 +27,10 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     @Resource
     private ICrawlerDao crawlerDao;
 
-    private String savePath = "\\images\\remen\\teshuchanghe\\zaocan\\";
-    private String savePathWay = "\\images\\remen\\teshuchanghe\\zaocan\\makeway\\";
-    private String url = "http://www.xiachufang.com/category/40071/?page=";
-    private int categoryId = 83;
+    private String savePath = "\\images\\remen\\teshuchanghe\\xiaoye\\";
+    private String savePathWay = "\\images\\remen\\teshuchanghe\\xiaoye\\makeway\\";
+    private String url = "http://www.xiachufang.com/category/51865/?page=";
+    private int categoryId = 90;
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -254,6 +254,7 @@ public class CrawlerService extends BaseService implements ICrawlerService{
                     Elements unitElm = tr.select("td.unit");
                     if(unitElm != null && unitElm.size() != 0){
                         String unit = unitElm.first().text();
+                        unit = StringUtil.filterUtf8mb4(unit);
                         System.out.println(""+unit);
                         foodMaterialGson.setUnit(unit);
                     }else {
