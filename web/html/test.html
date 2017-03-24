@@ -5,6 +5,86 @@
     <title>Title</title>
 </head>
 <body>
-    <button><a href="test/test/test">test</a></button>
+    <div>
+        Message: <input type="text" id="messageinput" />
+    </div>
+    <div>
+        <button type="button" onclick="openSocket();" >Open WebSocket</button>
+        <button type="button" onclick="send();" >Send Message</button>
+        <button type="button" onclick="closeSocket();" >Close WebSocket</button>
+    </div>
+    <!-- Server responses get written here -->
+    <div id="messages"></div>
+
+
+
+    <script type="text/javascript">
+        var webSocket;
+        var messages = document.getElementById('messages');
+//        var wsUri = getWebSocketUri('/meishijia/chatServer');
+        var wsUri = "ws://localhost:8080/meishijia/chatServer";
+
+        function getWebSocketUri(wsPath) {
+            return (window.location.protocol == "http" ? "ws://" : "wss://")
+                + (window.location.hostname == "" ? "localhost" : window.location.hostname)
+                + ":"
+                + (window.location.port == "" ? "8080" : window.location.port)
+                + wsPath;
+        }
+
+        function writeResponse(text) {
+            messages.innerHTML += "<br/>" + text;
+        }
+
+        function openSocket() {
+            if(webSocket != null && webSocket != undefined && webSocket.readyState != WebSocket.CLOSED){
+                writeResponse("WebSocket is already opened.");
+                return;
+            }
+
+            writeResponse("<span style='color:blue;'>INFO:</span>Open WebSocket:"+wsUri);
+            webSocket = new WebSocket(wsUri);
+
+            webSocket.onopen = function (event) {
+                if(event.data === undefined)
+                    return;
+                writeResponse(event.data);
+            };
+
+            webSocket.onmessage = function (event) {
+                writeResponse(event.data);
+            }
+
+            webSocket.onerror = function (event) {
+                writeResponse("<span style='color:red;'>ERROR:</span>Connection error!"+event.data);
+            }
+
+            webSocket.onclose = function (event) {
+                writeResponse("<span style='color:blue;'>INFO:</span>Connection closed. code="+event.data);
+            }
+        }
+
+        function send() {
+            if(webSocket == null && webSocket == undefined && webSocket.readyState == WebSocket.CLOSED){
+                writeResponse("<span style='color:red;'>ERROR:</span>WebSocket is not opened!");
+                return;
+            }
+            var text = document.getElementById('messageinput').value;
+            if(text.length == 0){
+                writeResponse("<span style='color:red;'>ERROR:</span>Message is empty!");
+                return;
+            }
+            webSocket.send(text);
+        }
+
+        function closeSocket() {
+            if(webSocket != null){
+                webSocket.close();
+                webSocket = null;
+            }else {
+                writeResponse("<span style='color: blue;'>INFO:</span>Connection already closed.");
+            }
+        }
+    </script>
 </body>
 </html>
