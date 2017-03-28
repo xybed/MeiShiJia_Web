@@ -1,11 +1,13 @@
 package com.mumu.meishijia.controller;
 
+import com.mumu.meishijia.model.BaseModel;
 import lib.utils.MD5Util;
 import lib.utils.StringUtil;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +37,15 @@ public class BaseController {
         String[] strings =  queryString.split("&");
         Map<String, String> paramsMap = new HashMap<String, String>();
         if(strings.length > 0){
-            for(int i=0;i<strings.length;i++){
-                if(strings[i].contains("=") && !strings[i].startsWith("sign"))
-                    paramsMap.put(strings[i].substring(0, strings[i].lastIndexOf("=")), "");
+            for(String str : strings){
+                if(str.contains("=") && !str.startsWith("sign")){
+                    String[] paramStrs = str.split("=");
+                    if(paramStrs.length > 1){
+                        paramsMap.put(paramStrs[0], paramStrs[1]);
+                    }else {
+                        paramsMap.put(paramStrs[0], "");
+                    }
+                }
             }
         }
         return sign.equals(MD5Util.createParamSign(paramsMap, TOKEN_KEY));

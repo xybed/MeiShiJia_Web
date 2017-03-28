@@ -6,7 +6,7 @@ package com.mumu.meishijia.model;
  */
 public class BaseModel {
     private int resultType;
-    private int resultCode;
+    private int resultCode;//0为成功，-1为失败，-99为需重新登录
     private String detail;
     private Object data;
 

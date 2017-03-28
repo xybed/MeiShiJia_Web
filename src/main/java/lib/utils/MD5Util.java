@@ -43,13 +43,19 @@ public class MD5Util {
     public static String createParamSign(Map<String, String> param, String tokenKey){
         List<String> keyList = new ArrayList<String>();
         for(Map.Entry<String, String> entry : param.entrySet()){
-            keyList.add(entry.getKey());
+            keyList.add(entry.getKey() + "=" + entry.getValue());
         }
         Collections.sort(keyList);
         StringBuilder builder = new StringBuilder();
         builder.append(tokenKey);
         for(int i=0;i<keyList.size();i++){
-            builder.append(keyList.get(i));
+            if(i == keyList.size()-1){
+                //最后一个参数后面不要加&
+                builder.append(keyList.get(i));
+            }else{
+                builder.append(keyList.get(i));
+                builder.append("&");
+            }
         }
         builder.append(tokenKey);
         return MD5(builder.toString());

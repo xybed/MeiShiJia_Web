@@ -1,9 +1,13 @@
 import com.google.gson.Gson;
 import com.mumu.meishijia.pojo.crawler.FoodMaterialGson;
+import com.mumu.meishijia.service.user.UserService;
+import lib.utils.DateUtil;
 import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,5 +43,17 @@ public class TestMethod {
         String str = "！！";
         str = str.replaceAll("[^\\u0020-\\u9FA5]", "");
         System.out.println(str);
+    }
+
+    @Test
+    public void testTransaction(){
+        UserService userService = new UserService();
+        userService.register("15606954708", "123456", "1234");
+    }
+
+    @Test
+    public void canModifyTest(){
+        java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+        System.out.println(date.toString());
     }
 }

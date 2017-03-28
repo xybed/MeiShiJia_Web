@@ -3,6 +3,7 @@ package com.mumu.meishijia.pojo.crawler;
 import java.util.List;
 
 /**
+ * 食物简介的json
  * Created by Administrator on 2016/12/1.
  */
 public class FoodIngsGson {
