@@ -10,6 +10,7 @@ public class User {
     private String password;
     private String verifyCode;
     private String registerDate;
+    private String avatar;
     private String realName;
     private String nickname;
     private String mobilePhone;
@@ -58,6 +59,14 @@ public class User {
 
     public void setRegisterDate(String registerDate) {
         this.registerDate = registerDate;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getRealName() {

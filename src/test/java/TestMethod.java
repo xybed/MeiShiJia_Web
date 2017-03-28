@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.pojo.crawler.FoodMaterialGson;
 import com.mumu.meishijia.service.user.UserService;
 import lib.utils.DateUtil;
@@ -46,14 +47,7 @@ public class TestMethod {
     }
 
     @Test
-    public void testTransaction(){
-        UserService userService = new UserService();
-        userService.register("15606954708", "123456", "1234");
-    }
-
-    @Test
     public void canModifyTest(){
-        java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-        System.out.println(date.toString());
+
     }
 }

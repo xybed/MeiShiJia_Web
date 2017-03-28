@@ -1,5 +1,6 @@
 package com.mumu.meishijia.service.user;
 
+import com.mumu.meishijia.Constacts;
 import com.mumu.meishijia.dao.user.IUserDao;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
@@ -29,6 +30,7 @@ public class UserService implements IUserService{
         user.setPassword(password);
         user.setVerifyCode(verifyCode);
         user.setRegisterDate(registerDate);
+        user.setAvatar("avatar/icon_default_avatar.png");
         //注册时，昵称用手机号代替
         user.setNickname(username);
         user.setMobilePhone(username);
@@ -68,6 +70,7 @@ public class UserService implements IUserService{
 
             userModel.setId(user.getId());
             userModel.setUsername(user.getUsername());
+            userModel.setAvatar(Constacts.BaseUrl + user.getAvatar());
             userModel.setRealName(user.getRealName());
             userModel.setNickname(user.getNickname());
             userModel.setMobilePhone(user.getMobilePhone());

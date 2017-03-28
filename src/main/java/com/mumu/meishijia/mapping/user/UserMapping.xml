@@ -4,9 +4,9 @@
 <mapper namespace="com.mumu.meishijia.dao.user.IUserDao">
     <insert id="register" parameterType="com.mumu.meishijia.pojo.user.User">
         INSERT INTO
-        `user`(username, password, verify_code, register_date, real_name, nickname, mobile_phone, sex, birthday, email, city, address)
+        `user`(username, password, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, city, address)
         VALUES
-        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{realName}, #{nickname}, #{mobilePhone}, #{sex}, #{birthday}, #{email}, #{city}, #{address})
+        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{realName}, #{nickname}, #{mobilePhone}, #{sex}, #{birthday}, #{email}, #{city}, #{address})
     </insert>
     <update id="updatePid" parameterType="java.lang.String">
         UPDATE `user` SET principle_id = id+1000 WHERE username=#{username}
