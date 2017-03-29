@@ -1,6 +1,6 @@
 package com.mumu.meishijia.service.user;
 
-import com.mumu.meishijia.Constacts;
+import com.mumu.meishijia.constacts.Constacts;
 import com.mumu.meishijia.dao.user.IUserDao;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
