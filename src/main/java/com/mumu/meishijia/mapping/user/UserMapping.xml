@@ -2,6 +2,12 @@
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mumu.meishijia.dao.user.IUserDao">
+    <select id="verifyRegister" parameterType="java.lang.String">
+        SELECT COUNT FROM `user` WHERE username=#{username}
+    </select>
+    <select id="verifyPassword" parameterType="java.lang.String">
+        SELECT COUNT FROM `user` WHERE username=#{username} AND password=#{password}
+    </select>
     <insert id="register" parameterType="com.mumu.meishijia.pojo.user.User">
         INSERT INTO
         `user`(username, password, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, city, address)
@@ -11,13 +17,14 @@
     <update id="updatePid" parameterType="java.lang.String">
         UPDATE `user` SET principle_id = id+1000 WHERE username=#{username}
     </update>
-    <select id="login" parameterType="java.lang.String">
+    <select id="login" parameterType="java.lang.String" resultType="com.mumu.meishijia.pojo.user.User">
         SELECT * FROM `user` WHERE username=#{username} AND password=#{password}
     </select>
-    <insert id="insertToken" parameterType="com.mumu.meishijia.pojo.user.UserToken">
+    <insert id="insertOrUpdateToken" parameterType="com.mumu.meishijia.pojo.user.UserToken">
         INSERT INTO
         user_token(username, token, deadline)
         VALUES
         (#{username}, #{token}, #{deadline})
+        ON DUPLICATE KEY UPDATE token=#{token},deadline=#{deadline}
     </insert>
 </mapper>

@@ -37,15 +37,29 @@ public class UserController extends BaseController{
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String verifyCode = request.getParameter("verify_code");
+        //0注册失败(sql问题)、1注册成功、2注册过、3且密码相同
         int result = userService.register(username, password, verifyCode);
-        if(result != 0){
-            baseModel.setResultType(0);
-            baseModel.setResultCode(0);
-            baseModel.setDetail("注册成功");
-        }else {
-            baseModel.setResultType(-1);
-            baseModel.setResultCode(-1);
-            baseModel.setDetail("注册失败，请稍后再试");
+        switch (result){
+            case 0:
+                baseModel.setResultType(-1);
+                baseModel.setResultCode(-1);
+                baseModel.setDetail("注册失败，请稍后再试");
+                break;
+            case 1:
+                baseModel.setResultType(0);
+                baseModel.setResultCode(0);
+                baseModel.setDetail("注册成功");
+                break;
+            case 2:
+                baseModel.setResultType(-1);
+                baseModel.setResultCode(-1);
+                baseModel.setDetail("该用户已注册过");
+                break;
+            case 3:
+                baseModel.setResultType(0);
+                baseModel.setResultCode(0);
+                baseModel.setDetail("该用户注册过且密码相同，自动为您登录");
+                break;
         }
         return baseModel;
     }

@@ -23,6 +23,22 @@ public class UserService implements IUserService{
 
     @Transactional
     public int register(String username, String password, String verifyCode) {
+        /*
+        1.先检测此用户是否注册过
+        2.若注册过，密码是否相同
+        3.没有注册过就注册，设置默认信息
+        4.设置消息主体id，3、4步骤要用到事务
+         */
+        int isRegister = userDao.verifyRegister(username);
+        if(isRegister == 1){
+            int passwordIsCorrect = userDao.verifyPassword(username, password);
+            if(passwordIsCorrect == 1){
+                return 3;
+            }else {
+                return 2;
+            }
+        }
+
         User user = new User();
         String registerDate = DateUtil.getTime("yyyy-MM-dd HH:mm:ss");
 
@@ -52,6 +68,10 @@ public class UserService implements IUserService{
     }
 
     public UserModel login(String username, String password){
+        /*
+        1.登录验证密码是否正确
+        2.生成token
+         */
         User user = new User();
         UserModel userModel = new UserModel();
         user.setUsername(username);
@@ -66,7 +86,7 @@ public class UserService implements IUserService{
             userToken.setUsername(username);
             userToken.setToken(token);
             userToken.setDeadline(deadline+"");
-            userDao.insertToken(userToken);
+            userDao.insertOrUpdateToken(userToken);
 
             userModel.setId(user.getId());
             userModel.setUsername(user.getUsername());
