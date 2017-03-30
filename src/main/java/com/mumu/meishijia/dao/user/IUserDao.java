@@ -15,5 +15,7 @@ public interface IUserDao {
     int register(User user);
     int updatePid(String username);
     User login(User user);
+    void logout(String token);
     void insertOrUpdateToken(UserToken userToken);
+    int updatePassword(String username, String password);
 }

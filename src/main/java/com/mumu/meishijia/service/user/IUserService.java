@@ -8,4 +8,6 @@ import com.mumu.meishijia.model.user.UserModel;
 public interface IUserService {
     int register(String username, String password, String verifyCode);
     UserModel login(String username, String password);
+    void logout(String token);
+    int updatePassword(String username, String password);
 }

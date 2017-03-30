@@ -49,7 +49,7 @@ public class UserService implements IUserService{
         user.setAvatar("avatar/icon_default_avatar.png");
         //注册时，昵称用手机号代替
         user.setNickname(username);
-        user.setMobilePhone(username);
+        user.setMobile_phone(username);
         //性别为未知
         user.setSex(0);
 
@@ -91,9 +91,9 @@ public class UserService implements IUserService{
             userModel.setId(user.getId());
             userModel.setUsername(user.getUsername());
             userModel.setAvatar(Constacts.BaseUrl + user.getAvatar());
-            userModel.setRealName(user.getRealName());
+            userModel.setReal_name(user.getReal_name());
             userModel.setNickname(user.getNickname());
-            userModel.setMobilePhone(user.getMobilePhone());
+            userModel.setMobile_phone(user.getMobile_phone());
             userModel.setSex(user.getSex());
             userModel.setBirthday(user.getBirthday());
             userModel.setEmail(user.getEmail());
@@ -106,5 +106,13 @@ public class UserService implements IUserService{
             return null;
         }
         return userModel;
+    }
+
+    public void logout(String token){
+        userDao.logout(token);
+    }
+
+    public int updatePassword(String username, String password) {
+        return userDao.updatePassword(username, password);
     }
 }

@@ -4,6 +4,7 @@ import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.model.BaseModel;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.service.user.IUserService;
+import lib.utils.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,6 +50,7 @@ public class UserController extends BaseController{
                 baseModel.setResultType(0);
                 baseModel.setResultCode(0);
                 baseModel.setDetail("注册成功");
+                baseModel.setData("注册成功");
                 break;
             case 2:
                 baseModel.setResultType(-1);
@@ -59,6 +61,7 @@ public class UserController extends BaseController{
                 baseModel.setResultType(0);
                 baseModel.setResultCode(0);
                 baseModel.setDetail("该用户注册过且密码相同，自动为您登录");
+                baseModel.setData("该用户注册过且密码相同，自动为您登录");
                 break;
         }
         return baseModel;
@@ -89,6 +92,62 @@ public class UserController extends BaseController{
             baseModel.setResultType(-1);
             baseModel.setResultCode(-1);
             baseModel.setDetail("用户名或密码不正确");
+        }
+        return baseModel;
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public BaseModel logout(HttpServletRequest request){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+
+        String token = request.getParameter("token");
+        userService.logout(token);
+        baseModel.setResultType(0);
+        baseModel.setResultCode(0);
+        baseModel.setDetail("退出登录成功");
+        return baseModel;
+    }
+
+    @RequestMapping("/modifyPwd")
+    @ResponseBody
+    public BaseModel modifyPassword(HttpServletRequest request){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if(StringUtil.isEmpty(username) || StringUtil.isEmpty(password)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+        int result = userService.updatePassword(username, password);
+        if(result == 0){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("没有此用户");
+        }else {
+            baseModel.setResultType(0);
+            baseModel.setResultCode(0);
+            baseModel.setDetail("修改密码成功");
+            baseModel.setData("修改密码成功");
         }
         return baseModel;
     }

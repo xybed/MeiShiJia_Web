@@ -11,9 +11,9 @@ public class User {
     private String verifyCode;
     private String registerDate;
     private String avatar;
-    private String realName;
+    private String real_name;
     private String nickname;
-    private String mobilePhone;
+    private String mobile_phone;
     private int sex;
     private String birthday;
     private String email;
@@ -69,12 +69,12 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getReal_name() {
+        return real_name;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setReal_name(String real_name) {
+        this.real_name = real_name;
     }
 
     public String getNickname() {
@@ -85,12 +85,12 @@ public class User {
         this.nickname = nickname;
     }
 
-    public String getMobilePhone() {
-        return mobilePhone;
+    public String getMobile_phone() {
+        return mobile_phone;
     }
 
-    public void setMobilePhone(String mobilePhone) {
-        this.mobilePhone = mobilePhone;
+    public void setMobile_phone(String mobile_phone) {
+        this.mobile_phone = mobile_phone;
     }
 
     public int getSex() {

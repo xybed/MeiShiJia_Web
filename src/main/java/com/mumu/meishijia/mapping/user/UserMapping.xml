@@ -6,20 +6,23 @@
         SELECT COUNT FROM `user` WHERE username=#{username}
     </select>
     <select id="verifyPassword" parameterType="java.lang.String">
-        SELECT COUNT FROM `user` WHERE username=#{username} AND password=#{password}
+        SELECT COUNT FROM `user` WHERE username=#{username} AND `password`=#{password}
     </select>
     <insert id="register" parameterType="com.mumu.meishijia.pojo.user.User">
         INSERT INTO
-        `user`(username, password, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, city, address)
+        `user`(username, `password`, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, city, address)
         VALUES
-        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{realName}, #{nickname}, #{mobilePhone}, #{sex}, #{birthday}, #{email}, #{city}, #{address})
+        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{real_name}, #{nickname}, #{mobile_phone}, #{sex}, #{birthday}, #{email}, #{city}, #{address})
     </insert>
     <update id="updatePid" parameterType="java.lang.String">
         UPDATE `user` SET principle_id = id+1000 WHERE username=#{username}
     </update>
     <select id="login" parameterType="java.lang.String" resultType="com.mumu.meishijia.pojo.user.User">
-        SELECT * FROM `user` WHERE username=#{username} AND password=#{password}
+        SELECT * FROM `user` WHERE username=#{username} AND `password`=#{password}
     </select>
+    <update id="logout" parameterType="java.lang.String">
+        UPDATE user_token SET token='',deadline='' WHERE token=#{token}
+    </update>
     <insert id="insertOrUpdateToken" parameterType="com.mumu.meishijia.pojo.user.UserToken">
         INSERT INTO
         user_token(username, token, deadline)
@@ -27,4 +30,7 @@
         (#{username}, #{token}, #{deadline})
         ON DUPLICATE KEY UPDATE token=#{token},deadline=#{deadline}
     </insert>
+    <update id="updatePassword" parameterType="java.lang.String">
+        UPDATE `user` SET `password`=#{password} WHERE username=#{username}
+    </update>
 </mapper>
