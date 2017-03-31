@@ -3,10 +3,13 @@ import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.pojo.crawler.FoodMaterialGson;
 import com.mumu.meishijia.service.user.UserService;
 import lib.utils.DateUtil;
+import lib.utils.MD5Util;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +51,13 @@ public class TestMethod {
 
     @Test
     public void canModifyTest(){
-
+        String s1 = "MeiShiJiabirthday=&city=&email=&id=1&nickname=大木神&platform=android&real_name=mumu&token=e4ac899983b7f81c0ac8d3304320dbed&ver=1MeiShiJia";
+        String s2 = "MeiShiJiabirthday=&city=&email=&id=1&nickname=%E5%A4%A7%E6%9C%A8%E7%A5%9E&platform=android&real_name=mumu&token=e4ac899983b7f81c0ac8d3304320dbed&ver=1MeiShiJia";
+        System.out.println(MD5Util.MD5(s1));
+        try {
+            System.out.println(MD5Util.MD5(URLDecoder.decode(s2, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

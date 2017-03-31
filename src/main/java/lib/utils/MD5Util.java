@@ -1,5 +1,7 @@
 package lib.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -20,8 +22,8 @@ public class MD5Util {
         try {
             //获得MD5摘要算法的MessageDigest对象
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            //使用指定的字节更新摘要
-            messageDigest.update(s.getBytes());
+            //使用指定的字节更新摘要，对于spring配置过的编码过滤器，需指定utf-8的编码，不然java默认为unicode编码
+            messageDigest.update(s.getBytes("utf-8"));
             //获得密文
             byte[] md = messageDigest.digest();
             //把密文转换成十六进制的字符串形式
@@ -35,6 +37,9 @@ public class MD5Util {
             }
             return new String(str);
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
         }

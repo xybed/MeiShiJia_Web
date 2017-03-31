@@ -115,4 +115,8 @@ public class UserService implements IUserService{
     public int updatePassword(String username, String password) {
         return userDao.updatePassword(username, password);
     }
+
+    public int updateUser(User user){
+        return userDao.updateUser(user);
+    }
 }

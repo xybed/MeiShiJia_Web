@@ -3,6 +3,7 @@ package com.mumu.meishijia.controller.user;
 import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.model.BaseModel;
 import com.mumu.meishijia.model.user.UserModel;
+import com.mumu.meishijia.pojo.user.User;
 import com.mumu.meishijia.service.user.IUserService;
 import lib.utils.StringUtil;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * 关于用户的controller
@@ -148,6 +151,49 @@ public class UserController extends BaseController{
             baseModel.setResultCode(0);
             baseModel.setDetail("修改密码成功");
             baseModel.setData("修改密码成功");
+        }
+        return baseModel;
+    }
+
+    @RequestMapping("/modifyUserInfo")
+    @ResponseBody
+    public BaseModel modifyUserInfo(HttpServletRequest request){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            baseModel.setData(null);
+            return baseModel;
+        }
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        String nickname = request.getParameter("nickname");
+        String realName = request.getParameter("real_name");
+        int sex = Integer.parseInt(request.getParameter("sex"));
+        String birthday = request.getParameter("birthday");
+        String email = request.getParameter("email");
+        String city = request.getParameter("city");
+        User user = new User();
+        user.setId(id);
+        user.setNickname(nickname);
+        user.setReal_name(realName);
+        user.setSex(sex);
+        user.setBirthday(birthday);
+        user.setEmail(email);
+        user.setCity(city);
+        int result = userService.updateUser(user);
+        if(result == 0){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("没有此用户");
+        }else {
+            baseModel.setResultType(0);
+            baseModel.setResultCode(0);
+            baseModel.setDetail("修改信息成功");
+            baseModel.setData("修改信息成功");
         }
         return baseModel;
     }

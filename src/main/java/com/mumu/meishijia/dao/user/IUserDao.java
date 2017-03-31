@@ -18,4 +18,5 @@ public interface IUserDao {
     void logout(String token);
     void insertOrUpdateToken(UserToken userToken);
     int updatePassword(String username, String password);
+    int updateUser(User user);
 }

@@ -6,6 +6,8 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,11 @@ public class BaseController {
             return false;
         if(StringUtil.isEmpty(queryString))
             return false;
+        try {
+            queryString = URLDecoder.decode(queryString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String[] strings =  queryString.split("&");
         Map<String, String> paramsMap = new HashMap<String, String>();
         if(strings.length > 0){

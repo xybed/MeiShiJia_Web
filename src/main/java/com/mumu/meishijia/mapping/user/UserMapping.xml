@@ -31,6 +31,16 @@
         ON DUPLICATE KEY UPDATE token=#{token},deadline=#{deadline}
     </insert>
     <update id="updatePassword" parameterType="java.lang.String">
-        UPDATE `user` SET `password`=#{password} WHERE username=#{username}
+        UPDATE `user` SET `password`=#{1} WHERE username=#{0}
+    </update>
+    <update id="updateUser" parameterType="com.mumu.meishijia.pojo.user.User">
+        UPDATE `user` SET
+            nickname=#{nickname},
+            real_name=#{real_name},
+            sex=#{sex},
+            birthday=#{birthday},
+            email=#{email},
+            city=#{city}
+        WHERE id=#{id}
     </update>
 </mapper>
