@@ -5,6 +5,7 @@ import com.mumu.meishijia.model.BaseModel;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
 import com.mumu.meishijia.service.user.IUserService;
+import lib.utils.NumberUtil;
 import lib.utils.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -172,7 +173,7 @@ public class UserController extends BaseController{
         int id = Integer.parseInt(request.getParameter("id"));
         String nickname = request.getParameter("nickname");
         String realName = request.getParameter("real_name");
-        int sex = Integer.parseInt(request.getParameter("sex"));
+        int sex = NumberUtil.parseInt(request.getParameter("sex"), 0);
         String birthday = request.getParameter("birthday");
         String email = request.getParameter("email");
         String city = request.getParameter("city");
