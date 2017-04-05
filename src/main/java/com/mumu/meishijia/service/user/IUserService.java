@@ -4,6 +4,7 @@ import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
 
 /**
+ * UserService的接口
  * Created by Administrator on 2017/3/28.
  */
 public interface IUserService {
@@ -12,4 +13,5 @@ public interface IUserService {
     void logout(String token);
     int updatePassword(String username, String password);
     int updateUser(User user);
+    int updateAvatar(int id, String avatar);
 }

@@ -43,4 +43,7 @@
             city=#{city}
         WHERE id=#{id}
     </update>
+    <update id="updateAvatar" parameterType="com.mumu.meishijia.pojo.user.User">
+        UPDATE `user` SET avatar=#{avatar} WHERE id=#{id}
+    </update>
 </mapper>

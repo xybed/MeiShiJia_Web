@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * BaseController
  * Created by 7mu on 2016/11/23.
  */
 public class BaseController {

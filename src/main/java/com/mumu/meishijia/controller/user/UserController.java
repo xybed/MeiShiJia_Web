@@ -1,20 +1,24 @@
 package com.mumu.meishijia.controller.user;
 
+import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.model.BaseModel;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
 import com.mumu.meishijia.service.user.IUserService;
+import lib.utils.FileUtil;
+import lib.utils.MD5Util;
 import lib.utils.NumberUtil;
 import lib.utils.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.io.IOException;
 
 /**
  * 关于用户的controller
@@ -195,6 +199,43 @@ public class UserController extends BaseController{
             baseModel.setResultCode(0);
             baseModel.setDetail("修改信息成功");
             baseModel.setData("修改信息成功");
+        }
+        return baseModel;
+    }
+
+    @RequestMapping("/modifyAvatar")
+    @ResponseBody
+    public BaseModel modifyAvatar(HttpServletRequest request, @RequestParam("img_file")MultipartFile file){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            baseModel.setData(null);
+            return baseModel;
+        }
+
+        String userId = request.getParameter("id");
+        //存图片,名字根据id加密
+        String avatar = MD5Util.MD5(userId);
+        try {
+            FileUtil.saveImage(file.getBytes(), getApplicationPath() + "/avatar/", avatar + ".png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int result = userService.updateAvatar(NumberUtil.parseInt(userId, 0), "avatar/" + avatar + ".png");
+        if(result == 0){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("修改头像失败");
+            baseModel.setData("修改头像失败");
+        }else {
+            baseModel.setResultType(0);
+            baseModel.setResultCode(0);
+            baseModel.setDetail("修改头像成功");
+            baseModel.setData(Constants.BaseUrl + "avatar/" + avatar + ".png");
         }
         return baseModel;
     }

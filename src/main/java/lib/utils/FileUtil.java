@@ -1,11 +1,14 @@
 package lib.utils;
 
+import com.mumu.meishijia.constacts.Constants;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * 关于文件的工具类
  * Created by 7mu on 2016/11/24.
  */
 public class FileUtil {
@@ -63,6 +66,39 @@ public class FileUtil {
         File file = new File(filePath);
         if(!file.exists() && !file.isDirectory()){
             file.mkdirs();
+        }
+    }
+
+    /**
+     * 把图片存储到磁盘中
+     * @param bytes 图片的字节数组
+     * @param filePath 图片存储的路径
+     * @param fileName 图片的名字
+     */
+    public static void saveImage(byte[] bytes, String filePath, String fileName){
+        InputStream is = null;
+        FileOutputStream fos = null;
+        try {
+            is = new ByteArrayInputStream(bytes);
+            File f = new File(filePath, fileName);
+            fos = new FileOutputStream(f);
+            byte[] b = new byte[1024];
+            int length;
+            while ((length = is.read(b)) != -1){
+                fos.write(b, 0, length);
+            }
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(is != null)
+                    is.close();
+                if(fos != null)
+                    fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

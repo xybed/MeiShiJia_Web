@@ -1,6 +1,6 @@
 package com.mumu.meishijia.service.user;
 
-import com.mumu.meishijia.constacts.Constacts;
+import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.dao.user.IUserDao;
 import com.mumu.meishijia.model.user.UserModel;
 import com.mumu.meishijia.pojo.user.User;
@@ -90,7 +90,7 @@ public class UserService implements IUserService{
 
             userModel.setId(user.getId());
             userModel.setUsername(user.getUsername());
-            userModel.setAvatar(Constacts.BaseUrl + user.getAvatar());
+            userModel.setAvatar(Constants.BaseUrl + user.getAvatar());
             userModel.setReal_name(user.getReal_name());
             userModel.setNickname(user.getNickname());
             userModel.setMobile_phone(user.getMobile_phone());
@@ -118,5 +118,12 @@ public class UserService implements IUserService{
 
     public int updateUser(User user){
         return userDao.updateUser(user);
+    }
+
+    public int updateAvatar(int id, String avatar){
+        User user = new User();
+        user.setId(id);
+        user.setAvatar(avatar);
+        return userDao.updateAvatar(user);
     }
 }
