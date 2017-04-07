@@ -180,6 +180,7 @@ public class UserController extends BaseController{
         int sex = NumberUtil.parseInt(request.getParameter("sex"), 0);
         String birthday = request.getParameter("birthday");
         String email = request.getParameter("email");
+        String province = request.getParameter("province");
         String city = request.getParameter("city");
         User user = new User();
         user.setId(id);
@@ -188,6 +189,7 @@ public class UserController extends BaseController{
         user.setSex(sex);
         user.setBirthday(birthday);
         user.setEmail(email);
+        user.setProvince(province);
         user.setCity(city);
         int result = userService.updateUser(user);
         if(result == 0){

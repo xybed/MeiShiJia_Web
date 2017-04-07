@@ -97,6 +97,7 @@ public class UserService implements IUserService{
             userModel.setSex(user.getSex());
             userModel.setBirthday(user.getBirthday());
             userModel.setEmail(user.getEmail());
+            userModel.setProvince(user.getProvince());
             userModel.setCity(user.getCity());
             userModel.setAddress(user.getAddress());
             userModel.setPrinciple_id(user.getPrinciple_id());

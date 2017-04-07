@@ -17,6 +17,7 @@ public class User {
     private int sex;
     private String birthday;
     private String email;
+    private String province;
     private String city;
     private String address;
     private int principle_id;
@@ -115,6 +116,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCity() {
