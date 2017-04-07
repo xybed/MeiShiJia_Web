@@ -1,10 +1,14 @@
 package com.mumu.meishijia.controller;
 
+import com.mumu.meishijia.pojo.user.UserToken;
+import com.mumu.meishijia.service.user.ITokenService;
 import lib.utils.MD5Util;
+import lib.utils.NumberUtil;
 import lib.utils.StringUtil;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -17,6 +21,8 @@ import java.util.Map;
  */
 public class BaseController {
     private static final String TOKEN_KEY = "MeiShiJia";
+    @Resource
+    private ITokenService tokenService;
 
     protected String getApplicationPath(){
         WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
@@ -55,5 +61,18 @@ public class BaseController {
             }
         }
         return sign.equals(MD5Util.createParamSign(paramsMap, TOKEN_KEY));
+    }
+
+    /**
+     * 验证token的有效性
+     * 1.如果表中无该token数据，证明token被清除或者token非法，则无效
+     * 2.如果token期限已过，证明需要更换token，则无效
+     * 3.不满足1、2条件，token为有效
+     * @param token token
+     * @return 有效返回true，无效返回false
+     */
+    public boolean validateToken(String token){
+        UserToken userToken = tokenService.queryToken(token);
+        return userToken != null && System.currentTimeMillis() <= NumberUtil.parseLong(userToken.getDeadline(), 0);
     }
 }
