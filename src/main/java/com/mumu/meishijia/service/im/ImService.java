@@ -1,5 +1,6 @@
 package com.mumu.meishijia.service.im;
 
+import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.dao.im.IImDao;
 import com.mumu.meishijia.model.im.ContactsModel;
 import com.mumu.meishijia.pojo.im.Contacts;
@@ -27,7 +28,7 @@ public class ImService implements IImService{
             model = new ContactsModel();
             model.setId(contacts.getFriend_id());
             model.setRemark(contacts.getRemark());
-            model.setAvatar(contacts.getAvatar());
+            model.setAvatar(Constants.BaseUrl + contacts.getAvatar());
             model.setSort_letter(contacts.getSort_letter());
             modelList.add(model);
         }

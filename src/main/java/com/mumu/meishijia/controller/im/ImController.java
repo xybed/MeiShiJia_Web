@@ -45,7 +45,7 @@ public class ImController extends BaseController{
             return baseModel;
         }
 
-        int id = NumberUtil.parseInt(request.getParameter("id"),0);
+        int id = NumberUtil.parseInt(request.getParameter("id"), 0);
         List<ContactsModel> modelList = imService.queryContacts(id);
         baseModel.setResultType(0);
         baseModel.setResultCode(0);

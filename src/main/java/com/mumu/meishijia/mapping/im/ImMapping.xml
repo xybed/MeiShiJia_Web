@@ -5,6 +5,6 @@
     <select id="queryContacts" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.pojo.im.Contacts">
         SELECT friend_id,remark,avatar,sort_letter
         FROM `user`,relation_chain
-        WHERE id=#{id} AND user_id=#{id}
+        WHERE user_id=#{id} AND id=friend_id
     </select>
 </mapper>
