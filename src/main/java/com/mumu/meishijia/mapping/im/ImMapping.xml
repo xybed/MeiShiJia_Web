@@ -2,9 +2,14 @@
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mumu.meishijia.dao.im.IImDao">
-    <select id="queryContacts" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.pojo.im.Contacts">
+    <select id="queryContacts" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.model.im.ContactsModel">
         SELECT friend_id,remark,avatar,sort_letter
         FROM `user`,relation_chain
         WHERE user_id=#{id} AND id=friend_id
+    </select>
+    <select id="queryContactsDetail" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.model.im.ContactsDetailModel">
+        SELECT avatar,remark,sex,username,nickname,province,city,signature,principle_id
+        FROM `user`,relation_chain
+        WHERE friend_id=#{1} AND user_id=#{0} AND id=#{1}
     </select>
 </mapper>

@@ -100,6 +100,7 @@ public class UserService implements IUserService{
             userModel.setProvince(user.getProvince());
             userModel.setCity(user.getCity());
             userModel.setAddress(user.getAddress());
+            userModel.setSignature(user.getSignature());
             userModel.setPrinciple_id(user.getPrinciple_id());
             userModel.setToken(token);
         }else {

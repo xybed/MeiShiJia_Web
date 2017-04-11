@@ -182,6 +182,7 @@ public class UserController extends BaseController{
         String email = request.getParameter("email");
         String province = request.getParameter("province");
         String city = request.getParameter("city");
+        String signature = request.getParameter("signature");
         User user = new User();
         user.setId(id);
         user.setNickname(nickname);
@@ -191,6 +192,7 @@ public class UserController extends BaseController{
         user.setEmail(email);
         user.setProvince(province);
         user.setCity(city);
+        user.setSignature(signature);
         int result = userService.updateUser(user);
         if(result == 0){
             baseModel.setResultType(-1);

@@ -10,9 +10,9 @@
     </select>
     <insert id="register" parameterType="com.mumu.meishijia.pojo.user.User">
         INSERT INTO
-        `user`(username, `password`, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, province, city, address)
+        `user`(username, `password`, verify_code, register_date, avatar, real_name, nickname, mobile_phone, sex, birthday, email, province, city, address, signature)
         VALUES
-        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{real_name}, #{nickname}, #{mobile_phone}, #{sex}, #{birthday}, #{email}, #{province}, #{city}, #{address})
+        (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{real_name}, #{nickname}, #{mobile_phone}, #{sex}, #{birthday}, #{email}, #{province}, #{city}, #{address}, #{signature})
     </insert>
     <update id="updatePid" parameterType="java.lang.String">
         UPDATE `user` SET principle_id = id+1000 WHERE username=#{username}
@@ -41,7 +41,8 @@
             birthday=#{birthday},
             email=#{email},
             province=#{province},
-            city=#{city}
+            city=#{city},
+            signature=#{signature}
         WHERE id=#{id}
     </update>
     <update id="updateAvatar" parameterType="com.mumu.meishijia.pojo.user.User">

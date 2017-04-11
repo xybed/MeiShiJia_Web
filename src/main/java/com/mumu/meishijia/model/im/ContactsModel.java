@@ -5,17 +5,17 @@ package com.mumu.meishijia.model.im;
  * Created by Administrator on 2017/4/7.
  */
 public class ContactsModel {
-    private int id;
+    private int friend_id;
     private String remark;
     private String avatar;
     private String sort_letter;
 
-    public int getId() {
-        return id;
+    public int getFriend_id() {
+        return friend_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFriend_id(int friend_id) {
+        this.friend_id = friend_id;
     }
 
     public String getRemark() {

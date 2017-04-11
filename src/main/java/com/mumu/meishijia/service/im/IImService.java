@@ -1,5 +1,6 @@
 package com.mumu.meishijia.service.im;
 
+import com.mumu.meishijia.model.im.ContactsDetailModel;
 import com.mumu.meishijia.model.im.ContactsModel;
 
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.List;
  */
 public interface IImService {
     List<ContactsModel> queryContacts(int id);
+    ContactsDetailModel queryContactsDetail(int user_id, int friend_id);
 }

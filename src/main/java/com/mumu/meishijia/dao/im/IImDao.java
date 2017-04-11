@@ -1,6 +1,7 @@
 package com.mumu.meishijia.dao.im;
 
-import com.mumu.meishijia.pojo.im.Contacts;
+import com.mumu.meishijia.model.im.ContactsModel;
+import com.mumu.meishijia.model.im.ContactsDetailModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,5 +12,6 @@ import java.util.List;
  */
 @Repository("imDao")
 public interface IImDao {
-    List<Contacts> queryContacts(int id);
+    List<ContactsModel> queryContacts(int id);
+    ContactsDetailModel queryContactsDetail(int userId, int friendId);
 }

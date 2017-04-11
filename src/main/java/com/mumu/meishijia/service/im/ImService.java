@@ -2,12 +2,11 @@ package com.mumu.meishijia.service.im;
 
 import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.dao.im.IImDao;
+import com.mumu.meishijia.model.im.ContactsDetailModel;
 import com.mumu.meishijia.model.im.ContactsModel;
-import com.mumu.meishijia.pojo.im.Contacts;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,17 +20,16 @@ public class ImService implements IImService{
     private IImDao imDao;
 
     public List<ContactsModel> queryContacts(int id) {
-        List<Contacts> contactsList = imDao.queryContacts(id);
-        List<ContactsModel> modelList = new ArrayList<ContactsModel>();
-        ContactsModel model;
-        for(Contacts contacts : contactsList){
-            model = new ContactsModel();
-            model.setId(contacts.getFriend_id());
-            model.setRemark(contacts.getRemark());
-            model.setAvatar(Constants.BaseUrl + contacts.getAvatar());
-            model.setSort_letter(contacts.getSort_letter());
-            modelList.add(model);
+        List<ContactsModel> contactsList = imDao.queryContacts(id);
+        for(ContactsModel contacts : contactsList){
+            contacts.setAvatar(Constants.BaseUrl + contacts.getAvatar());
         }
-        return modelList;
+        return contactsList;
+    }
+
+    public ContactsDetailModel queryContactsDetail(int userId, int friendId) {
+        ContactsDetailModel contactsDetailModel = imDao.queryContactsDetail(userId, friendId);
+        contactsDetailModel.setAvatar(Constants.BaseUrl + contactsDetailModel.getAvatar());
+        return contactsDetailModel;
     }
 }

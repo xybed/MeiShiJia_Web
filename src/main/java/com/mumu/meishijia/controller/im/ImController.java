@@ -2,6 +2,7 @@ package com.mumu.meishijia.controller.im;
 
 import com.mumu.meishijia.controller.BaseController;
 import com.mumu.meishijia.model.BaseModel;
+import com.mumu.meishijia.model.im.ContactsDetailModel;
 import com.mumu.meishijia.model.im.ContactsModel;
 import com.mumu.meishijia.service.im.IImService;
 import lib.utils.NumberUtil;
@@ -51,6 +52,38 @@ public class ImController extends BaseController{
         baseModel.setResultCode(0);
         baseModel.setDetail("请求成功");
         baseModel.setData(modelList);
+        return baseModel;
+    }
+
+    @RequestMapping("/contactsDetail")
+    @ResponseBody
+    public BaseModel getContactsDetail(HttpServletRequest request){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+
+        String token = request.getParameter("token");
+        if(!validateToken(token)){
+            baseModel.setResultType(-99);
+            baseModel.setResultCode(-99);
+            baseModel.setDetail("重新登录");
+            baseModel.setData("重新登录");
+            return baseModel;
+        }
+
+        int userId = NumberUtil.parseInt(request.getParameter("user_id"), 0);
+        int friend_id = NumberUtil.parseInt(request.getParameter("friend_id"), 0);
+        ContactsDetailModel model = imService.queryContactsDetail(userId, friend_id);
+        baseModel.setResultType(0);
+        baseModel.setResultCode(0);
+        baseModel.setDetail("请求成功");
+        baseModel.setData(model);
         return baseModel;
     }
 }

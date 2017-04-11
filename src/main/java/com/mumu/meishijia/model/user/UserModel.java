@@ -17,6 +17,7 @@ public class UserModel {
     private String province;
     private String city;
     private String address;
+    private String signature;
     private int principle_id;
     private String token;
 
@@ -114,6 +115,14 @@ public class UserModel {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public int getPrinciple_id() {

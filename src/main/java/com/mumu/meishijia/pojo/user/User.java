@@ -20,6 +20,7 @@ public class User {
     private String province;
     private String city;
     private String address;
+    private String signature;
     private int principle_id;
 
     public int getId() {
@@ -140,6 +141,14 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public int getPrinciple_id() {

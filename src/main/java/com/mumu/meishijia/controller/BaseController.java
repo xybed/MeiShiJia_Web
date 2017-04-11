@@ -50,7 +50,7 @@ public class BaseController {
         Map<String, String> paramsMap = new HashMap<String, String>();
         if(strings.length > 0){
             for(String str : strings){
-                if(str.contains("=") && !str.startsWith("sign")){
+                if(str.contains("=") && !str.startsWith("sign=")){
                     String[] paramStrs = str.split("=");
                     if(paramStrs.length > 1){
                         paramsMap.put(paramStrs[0], paramStrs[1]);
