@@ -86,4 +86,43 @@ public class ImController extends BaseController{
         baseModel.setData(model);
         return baseModel;
     }
+
+    @RequestMapping("/modifyRemark")
+    @ResponseBody
+    public BaseModel modifyRemark(HttpServletRequest request){
+        String queryString = request.getQueryString();
+        String sign = request.getParameter("sign");
+        BaseModel baseModel = new BaseModel();
+        if(!validateSign(queryString, sign)){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("请求违法");
+            return baseModel;
+        }
+
+        String token = request.getParameter("token");
+        if(!validateToken(token)){
+            baseModel.setResultType(-99);
+            baseModel.setResultCode(-99);
+            baseModel.setDetail("重新登录");
+            baseModel.setData("重新登录");
+            return baseModel;
+        }
+
+        int userId = NumberUtil.parseInt(request.getParameter("user_id"), 0);
+        int friendId = NumberUtil.parseInt(request.getParameter("friend_id"), 0);
+        String remark = request.getParameter("remark");
+        int result = imService.updateRemark(userId, friendId, remark);
+        if(result == 0){
+            baseModel.setResultType(-1);
+            baseModel.setResultCode(-1);
+            baseModel.setDetail("没有此用户");
+        }else {
+            baseModel.setResultType(0);
+            baseModel.setResultCode(0);
+            baseModel.setDetail("修改备注成功");
+            baseModel.setData("修改备注成功");
+        }
+        return baseModel;
+    }
 }

@@ -4,6 +4,7 @@ import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.dao.im.IImDao;
 import com.mumu.meishijia.model.im.ContactsDetailModel;
 import com.mumu.meishijia.model.im.ContactsModel;
+import com.mumu.meishijia.pojo.im.RelationChain;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,5 +32,13 @@ public class ImService implements IImService{
         ContactsDetailModel contactsDetailModel = imDao.queryContactsDetail(userId, friendId);
         contactsDetailModel.setAvatar(Constants.BaseUrl + contactsDetailModel.getAvatar());
         return contactsDetailModel;
+    }
+
+    public int updateRemark(int userId, int friendId, String remark) {
+        RelationChain relationChain = new RelationChain();
+        relationChain.setUser_id(userId);
+        relationChain.setFriend_id(friendId);
+        relationChain.setRemark(remark);
+        return imDao.updateRemark(relationChain);
     }
 }

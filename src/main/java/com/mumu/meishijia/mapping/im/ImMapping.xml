@@ -12,4 +12,7 @@
         FROM `user`,relation_chain
         WHERE friend_id=#{1} AND user_id=#{0} AND id=#{1}
     </select>
+    <update id="updateRemark" parameterType="com.mumu.meishijia.pojo.im.RelationChain">
+        UPDATE relation_chain SET remark=#{remark} WHERE user_id=#{user_id} AND friend_id=#{friend_id}
+    </update>
 </mapper>
