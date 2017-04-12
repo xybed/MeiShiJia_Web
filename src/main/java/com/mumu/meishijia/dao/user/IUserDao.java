@@ -19,5 +19,6 @@ public interface IUserDao {
     void insertOrUpdateToken(UserToken userToken);
     int updatePassword(String username, String password);
     int updateUser(User user);
+    String queryAvatar(int userId);
     int updateAvatar(User user);
 }

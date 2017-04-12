@@ -122,6 +122,10 @@ public class UserService implements IUserService{
         return userDao.updateUser(user);
     }
 
+    public String queryAvatar(int userId) {
+        return userDao.queryAvatar(userId);
+    }
+
     public int updateAvatar(int id, String avatar){
         User user = new User();
         user.setId(id);

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -222,8 +223,13 @@ public class UserController extends BaseController{
         }
 
         String userId = request.getParameter("id");
+        //查询数据库中对应的头像
+        String dbAvatar = userService.queryAvatar(NumberUtil.parseInt(userId, 0));
+        if(!dbAvatar.endsWith("icon_default_avatar.png")){
+            FileUtil.deleteFile(new File(getApplicationPath() + dbAvatar));
+        }
         //存图片,名字根据id加密
-        String avatar = MD5Util.MD5(userId);
+        String avatar = MD5Util.MD5(userId + System.currentTimeMillis());
         try {
             FileUtil.saveImage(file.getBytes(), getApplicationPath() + "/avatar/", avatar + ".png");
         } catch (IOException e) {

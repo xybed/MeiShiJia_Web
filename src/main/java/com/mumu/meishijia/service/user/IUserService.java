@@ -13,5 +13,6 @@ public interface IUserService {
     void logout(String token);
     int updatePassword(String username, String password);
     int updateUser(User user);
+    String queryAvatar(int userId);
     int updateAvatar(int id, String avatar);
 }
