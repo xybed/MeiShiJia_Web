@@ -15,7 +15,7 @@
         (#{username}, #{password}, #{verifyCode}, #{registerDate}, #{avatar}, #{real_name}, #{nickname}, #{mobile_phone}, #{sex}, #{birthday}, #{email}, #{province}, #{city}, #{address}, #{signature})
     </insert>
     <update id="updatePid" parameterType="java.lang.String">
-        UPDATE `user` SET principle_id = id+1000 WHERE username=#{username}
+        UPDATE `user` SET principal_id = id+1000 WHERE username=#{username}
     </update>
     <select id="login" parameterType="java.lang.String" resultType="com.mumu.meishijia.pojo.user.User">
         SELECT * FROM `user` WHERE username=#{username} AND `password`=#{password}

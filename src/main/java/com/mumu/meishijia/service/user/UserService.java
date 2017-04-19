@@ -101,7 +101,7 @@ public class UserService implements IUserService{
             userModel.setCity(user.getCity());
             userModel.setAddress(user.getAddress());
             userModel.setSignature(user.getSignature());
-            userModel.setPrinciple_id(user.getPrinciple_id());
+            userModel.setPrincipal_id(user.getPrincipal_id());
             userModel.setToken(token);
         }else {
             //没有此用户

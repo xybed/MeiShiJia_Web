@@ -9,7 +9,7 @@ public class ContactsModel {
     private String remark;
     private String avatar;
     private String sort_letter;
-    private int principle_id;
+    private int principal_id;
 
     public int getFriend_id() {
         return friend_id;
@@ -43,11 +43,11 @@ public class ContactsModel {
         this.sort_letter = sort_letter;
     }
 
-    public int getPrinciple_id() {
-        return principle_id;
+    public int getPrincipal_id() {
+        return principal_id;
     }
 
-    public void setPrinciple_id(int principle_id) {
-        this.principle_id = principle_id;
+    public void setPrincipal_id(int principal_id) {
+        this.principal_id = principal_id;
     }
 }
