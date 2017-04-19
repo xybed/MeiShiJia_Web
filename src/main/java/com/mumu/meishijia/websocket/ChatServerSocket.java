@@ -1,7 +1,13 @@
 package com.mumu.meishijia.websocket;
 
+import com.google.gson.Gson;
+import com.mumu.meishijia.model.im.MsgJsonModel;
+import com.mumu.meishijia.service.im.ISocketService;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * WebSocket的处理类
  * Created by Administrator on 2017/3/24.
  */
-@ServerEndpoint(value = "/chatServer")
+@ServerEndpoint(value = "/chatServer/{principleId}")
 public class ChatServerSocket {
     //用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
@@ -33,17 +39,28 @@ public class ChatServerSocket {
     //用户名和webSocket的session绑定的路由表
     private static Map<String, Session> socketSessionMap = new HashMap<String, Session>();
 
+    @Resource
+    private ISocketService socketService;
+
     @OnOpen
-    public void onOpen(Session session, EndpointConfig endpointConfig){
+    public void onOpen(@PathParam(value="principleId") String principleId, Session session, EndpointConfig endpointConfig){
         this.session = session;
         webSocketSet.add(this);
         httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
-
+        socketSessionMap.put(principleId, session);
+        System.out.println("socket连接成功");
     }
 
     @OnMessage
     public void onMessage(String message){
-        System.out.println("Message from" + session.getId() + ":" + message);
+        Gson gson = new Gson();
+        MsgJsonModel msgJson = gson.fromJson(message, MsgJsonModel.class);
+        //存消息记录到数据库
+        int msgId = socketService.insertMessage(msgJson);
+        //给msgJson加上发送者的头像、备注等
+
+        //用来从session集合中找对应的session
+        int toId = msgJson.getData().getTo_id();
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
