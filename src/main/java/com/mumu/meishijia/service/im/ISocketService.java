@@ -1,6 +1,7 @@
 package com.mumu.meishijia.service.im;
 
 import com.mumu.meishijia.model.im.MsgJsonModel;
+import com.mumu.meishijia.pojo.im.RelationChain;
 import com.mumu.meishijia.pojo.user.User;
 
 /**
@@ -9,5 +10,7 @@ import com.mumu.meishijia.pojo.user.User;
  */
 public interface ISocketService {
     int insertMessage(MsgJsonModel msgJson);
-    User querySendUser(int principal_id);
+    User querySendUser(int principalId);
+    int queryUserIdByPid(int principalId);
+    String queryRemark(int userId, int friendId);
 }

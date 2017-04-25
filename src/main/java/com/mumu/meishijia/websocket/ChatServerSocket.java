@@ -2,7 +2,9 @@ package com.mumu.meishijia.websocket;
 
 import com.google.gson.Gson;
 import com.mumu.meishijia.model.im.MsgJsonModel;
+import com.mumu.meishijia.pojo.user.User;
 import com.mumu.meishijia.service.im.ISocketService;
+import lib.utils.StringUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -20,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * WebSocket的处理类
  * Created by Administrator on 2017/3/24.
  */
-@ServerEndpoint(value = "/chatServer/{principleId}")
+@ServerEndpoint(value = "/chatServer/{principalId}")
 public class ChatServerSocket {
     //用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
@@ -29,8 +31,6 @@ public class ChatServerSocket {
     private static CopyOnWriteArraySet<ChatServerSocket> webSocketSet = new CopyOnWriteArraySet<ChatServerSocket>();
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
-    //记录连接到服务端的用户的用户名
-    private String userid;
     //request的session
     private HttpSession httpSession;
 
@@ -43,11 +43,11 @@ public class ChatServerSocket {
     private ISocketService socketService;
 
     @OnOpen
-    public void onOpen(@PathParam(value="principleId") String principleId, Session session, EndpointConfig endpointConfig){
+    public void onOpen(@PathParam(value="principalId") String principalId, Session session, EndpointConfig endpointConfig){
         this.session = session;
         webSocketSet.add(this);
         httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
-        socketSessionMap.put(principleId, session);
+        socketSessionMap.put(principalId, session);
         System.out.println("socket连接成功");
     }
 
@@ -57,12 +57,27 @@ public class ChatServerSocket {
         MsgJsonModel msgJson = gson.fromJson(message, MsgJsonModel.class);
         //存消息记录到数据库
         int msgId = socketService.insertMessage(msgJson);
+        //给msgJson加上msg_id
+        msgJson.setMsg_id(msgId);
         //给msgJson加上发送者的头像、备注等
-
+        int fromId = msgJson.getData().getFrom_id();
+        User sendUser = socketService.querySendUser(fromId);
+        msgJson.getData().setFriend_id(sendUser.getId());
+        msgJson.getData().setAvatar(sendUser.getAvatar());
+        //暂且标为发送者的昵称，可能为陌生人
+        msgJson.getData().setRemark(sendUser.getNickname());
         //用来从session集合中找对应的session
         int toId = msgJson.getData().getTo_id();
+        Session session = socketSessionMap.get(toId+"");
+        //找到备注名
+        int userId = socketService.queryUserIdByPid(toId);
+        String remark = socketService.queryRemark(userId, sendUser.getId());
+        if(!StringUtil.isEmpty(remark)){
+            msgJson.getData().setRemark(remark);
+        }
+
         try {
-            session.getBasicRemote().sendText(message);
+            session.getBasicRemote().sendText(gson.toJson(msgJson));
         } catch (IOException e) {
             e.printStackTrace();
         }

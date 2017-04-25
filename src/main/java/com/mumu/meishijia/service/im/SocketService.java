@@ -3,6 +3,7 @@ package com.mumu.meishijia.service.im;
 import com.mumu.meishijia.dao.im.ISocketDao;
 import com.mumu.meishijia.model.im.MsgJsonModel;
 import com.mumu.meishijia.pojo.im.MsgRecord;
+import com.mumu.meishijia.pojo.im.RelationChain;
 import com.mumu.meishijia.pojo.user.User;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,15 @@ public class SocketService implements ISocketService{
         return msgRecord.getId();
     }
 
-    public User querySendUser(int principal_id) {
-        return null;
+    public User querySendUser(int principalId) {
+        return socketDao.querySendUser(principalId);
+    }
+
+    public int queryUserIdByPid(int principalId) {
+        return socketDao.queryUserIdByPid(principalId);
+    }
+
+    public String queryRemark(int userId, int friendId) {
+        return socketDao.queryRemark(userId, friendId);
     }
 }
