@@ -22,7 +22,7 @@
         var webSocket;
         var messages = document.getElementById('messages');
 //        var wsUri = getWebSocketUri('/meishijia/chatServer');
-        var wsUri = "ws://localhost:8080/meishijia/chatServer/我的id";
+        var wsUri = "ws://localhost:8080/meishijia/chatServer?principal_id=123456";
 
         function getWebSocketUri(wsPath) {
             return (window.location.protocol == "http" ? "ws://" : "wss://")

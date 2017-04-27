@@ -53,6 +53,7 @@ public class ChatServerSocket {
 
     @OnMessage
     public void onMessage(String message){
+        System.out.println(message);
         Gson gson = new Gson();
         MsgJsonModel msgJson = gson.fromJson(message, MsgJsonModel.class);
         //存消息记录到数据库
