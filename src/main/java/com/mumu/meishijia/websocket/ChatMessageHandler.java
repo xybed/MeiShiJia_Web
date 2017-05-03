@@ -11,7 +11,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.annotation.Resource;
-import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +38,7 @@ public class ChatMessageHandler extends TextWebSocketHandler{
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("connect to the websocket success......");
         principalId = (String) session.getAttributes().get("principal_id");
+        System.out.println("connect principal_id is "+principalId);
         sessionMap.put(principalId, session);
     }
 
@@ -48,6 +48,8 @@ public class ChatMessageHandler extends TextWebSocketHandler{
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         System.out.println(message.getPayload());
+        //同样的消息再返回去，代表接收到了消息
+        session.sendMessage(message);
         Gson gson = new Gson();
         MsgJsonModel msgJson = gson.fromJson(message.getPayload(), MsgJsonModel.class);
         //存消息记录到数据库
@@ -72,7 +74,9 @@ public class ChatMessageHandler extends TextWebSocketHandler{
         WebSocketSession toSession = sessionMap.get(toId+"");
 
         String sendMessage = gson.toJson(msgJson);
-        toSession.sendMessage(new TextMessage(sendMessage));
+        if(toSession != null){
+            toSession.sendMessage(new TextMessage(sendMessage));
+        }
     }
 
     /**
@@ -117,12 +121,14 @@ public class ChatMessageHandler extends TextWebSocketHandler{
             session.close();
         }
         System.out.println("websocket connection error......");
+        exception.printStackTrace();
         sessionMap.remove(principalId);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         System.out.println("websocket connection closed......");
+        System.out.println("close principal_id is"+principalId);
         sessionMap.remove(principalId);
     }
 

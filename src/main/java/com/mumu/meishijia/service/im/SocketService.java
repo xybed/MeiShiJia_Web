@@ -1,5 +1,6 @@
 package com.mumu.meishijia.service.im;
 
+import com.mumu.meishijia.constacts.Constants;
 import com.mumu.meishijia.dao.im.ISocketDao;
 import com.mumu.meishijia.model.im.MsgJsonModel;
 import com.mumu.meishijia.pojo.im.MsgRecord;
@@ -37,7 +38,9 @@ public class SocketService implements ISocketService{
     }
 
     public User querySendUser(int principalId) {
-        return socketDao.querySendUser(principalId);
+        User user = socketDao.querySendUser(principalId);
+        user.setAvatar(Constants.BaseUrl + user.getAvatar());
+        return user;
     }
 
     public int queryUserIdByPid(int principalId) {

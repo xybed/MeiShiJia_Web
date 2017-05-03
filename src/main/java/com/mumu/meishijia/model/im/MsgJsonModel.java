@@ -8,7 +8,7 @@ package com.mumu.meishijia.model.im;
 public class MsgJsonModel {
     private int msg_type;
     private MsgDataModel data;
-    private int msg_id;//后台存储的每一条消息的id
+    private long msg_id;//后台存储的每一条消息的id
     private int conversation_id;
 
     public int getMsg_type() {
@@ -27,11 +27,11 @@ public class MsgJsonModel {
         this.data = data;
     }
 
-    public int getMsg_id() {
+    public long getMsg_id() {
         return msg_id;
     }
 
-    public void setMsg_id(int msg_id) {
+    public void setMsg_id(long msg_id) {
         this.msg_id = msg_id;
     }
 

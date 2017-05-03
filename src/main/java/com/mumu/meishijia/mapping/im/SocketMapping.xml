@@ -11,9 +11,9 @@
         SELECT id,avatar,nickname FROM `user` WHERE principal_id=#{principalId}
     </select>
     <select id="queryUserIdByPid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT user_id FROM relation_chain WHERE principal_id=#{principalId}
+        SELECT id FROM `user` WHERE principal_id=#{principalId}
     </select>
     <select id="queryRemark" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT remark FROM relatoin_chain WHERE user_id=#{0} AND friend_id=#{1}
+        SELECT remark FROM relation_chain WHERE user_id=#{0} AND friend_id=#{1}
     </select>
 </mapper>
