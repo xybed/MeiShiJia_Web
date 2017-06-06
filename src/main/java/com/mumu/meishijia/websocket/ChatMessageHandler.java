@@ -39,7 +39,11 @@ public class ChatMessageHandler extends TextWebSocketHandler{
         System.out.println("connect to the websocket success......");
         principalId = (String) session.getAttributes().get("principal_id");
         System.out.println("connect principal_id is "+principalId);
-        sessionMap.put(principalId, session);
+        if(sessionMap.containsKey(principalId)){
+            System.out.println("已经存在principal_id:"+principalId);
+        }else {
+            sessionMap.put(principalId, session);
+        }
     }
 
     /**
@@ -59,6 +63,7 @@ public class ChatMessageHandler extends TextWebSocketHandler{
         //给msgJson加上发送者的头像、备注等
         int fromId = msgJson.getData().getFrom_id();
         User sendUser = socketService.querySendUser(fromId);
+        System.out.println("user_id"+sendUser.getId());
         msgJson.getData().setFriend_id(sendUser.getId());
         msgJson.getData().setAvatar(sendUser.getAvatar());
         //暂且标为发送者的昵称，可能为陌生人
@@ -70,12 +75,17 @@ public class ChatMessageHandler extends TextWebSocketHandler{
         if(!StringUtil.isEmpty(remark)){
             msgJson.getData().setRemark(remark);
         }
+        //更改conversation_id
+        msgJson.setConversation_id(fromId);
         //用来从session集合中找对应的session
         WebSocketSession toSession = sessionMap.get(toId+"");
 
         String sendMessage = gson.toJson(msgJson);
+        System.out.println(sendMessage);
         if(toSession != null){
             toSession.sendMessage(new TextMessage(sendMessage));
+        }else{
+            System.out.println("principal_id " + toId + " session is not connect");
         }
     }
 
@@ -128,7 +138,7 @@ public class ChatMessageHandler extends TextWebSocketHandler{
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         System.out.println("websocket connection closed......");
-        System.out.println("close principal_id is"+principalId);
+        System.out.println("close principal_id is "+principalId);
         sessionMap.remove(principalId);
     }
 
