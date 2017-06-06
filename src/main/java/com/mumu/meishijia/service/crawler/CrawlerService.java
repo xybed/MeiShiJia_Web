@@ -1,5 +1,9 @@
 package com.mumu.meishijia.service.crawler;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.gson.Gson;
 import com.mumu.meishijia.dao.crawler.ICrawlerDao;
 import com.mumu.meishijia.pojo.crawler.*;
@@ -31,6 +35,8 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     private String savePathWay = "\\images\\remen\\teshuchanghe\\xiaoye\\makeway\\";
     private String url = "http://www.xiachufang.com/category/51865/?page=";
     private int categoryId = 90;
+    private String footballTeamUrl = "http://www.dongqiudi.com/data?competition=7";
+    private String footballLogo = "\\images\\logo\\";
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -375,5 +381,59 @@ public class CrawlerService extends BaseService implements ICrawlerService{
         String filePath = getApplicationPath() + "\\images";
         FileUtil.mkdir(filePath);
         FileUtil.downloadImage(img, filePath + "\\test.jpg");
+    }
+
+    /**
+     * 获取球队的名字和logo
+     */
+    public void getFootballTeam() {
+        String html = "";
+        try {
+            WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            //模拟浏览器打开一个目标网址
+            HtmlPage rootPage = webClient.getPage(footballTeamUrl);
+            Thread.sleep(2000);//主要是这个线程的等待 因为js加载也是需要时间的
+            html = rootPage.asXml();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Document document;
+        document = Jsoup.parse(html);
+        Element stateDetail = document.select("div#stat_detail").first();
+        Element table = stateDetail.select("table").first();
+        Elements tbody = table.select("tbody");
+        List<FootballTeam> teams = new ArrayList<FootballTeam>();
+        for(int i=0;i<tbody.size();i++){
+            if(i<1){
+                continue;
+            }
+            Element tr = tbody.get(i);
+            Element td = tr.select("td.team").first();
+            Element img = td.select("img").first();
+            String imgUrl = img.attr("src");
+            System.out.println("下载地址："+imgUrl);
+            //下载图片
+            String wayPath = getApplicationPath() + footballLogo;
+            FileUtil.mkdir(wayPath);
+            //从url中获取图片名称
+            URI wayUri = URI.create(imgUrl);
+            String wayUriPath = wayUri.getPath().substring(1);
+            System.out.println("储存路径："+wayPath+wayUriPath);
+            //下载图片
+            FileUtil.downloadImage(imgUrl, wayPath + wayUriPath);
+            FootballTeam team = new FootballTeam();
+            team.setLeagueId(1);
+            team.setName(td.text());
+            team.setLogo(footballLogo+wayUriPath);
+            teams.add(team);
+        }
+//        crawlerDao.insertFootballTeam(teams);
     }
 }

@@ -37,4 +37,10 @@ public class CrawlerController extends BaseController{
     public void getAllUrl(){
         crawlerService.getAllUrl();
     }
+
+    @RequestMapping("/footballTeam")
+    @ResponseBody
+    public void getFootballTeam(){
+        crawlerService.getFootballTeam();
+    }
 }

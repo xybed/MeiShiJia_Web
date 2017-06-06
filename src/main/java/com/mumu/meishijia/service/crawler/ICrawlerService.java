@@ -7,4 +7,5 @@ public interface ICrawlerService {
     void getCategory();
     void forPage();
     void getAllUrl();
+    void getFootballTeam();
 }

@@ -26,4 +26,15 @@
     <insert id="insertFoodCategory" parameterType="com.mumu.meishijia.pojo.crawler.FoodCategory">
         INSERT INTO food_category VALUES (#{foodId}, #{categoryId})
     </insert>
+    <insert id="insertFootballTeam" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        football_team(league_id, `name`, logo)
+        VALUES
+        <foreach collection="list" item="team" index="index" separator=",">
+            (#{team.leagueId}, #{team.name}, #{team.logo})
+        </foreach>
+    </insert>
 </mapper>
