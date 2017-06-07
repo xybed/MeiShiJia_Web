@@ -8,4 +8,5 @@ public interface ICrawlerService {
     void forPage();
     void getAllUrl();
     void getFootballTeam();
+    void getFootballTeamRanking();
 }

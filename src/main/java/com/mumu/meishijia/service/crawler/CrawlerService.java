@@ -9,6 +9,7 @@ import com.mumu.meishijia.dao.crawler.ICrawlerDao;
 import com.mumu.meishijia.pojo.crawler.*;
 import com.mumu.meishijia.service.BaseService;
 import lib.utils.FileUtil;
+import lib.utils.NumberUtil;
 import lib.utils.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,8 +36,9 @@ public class CrawlerService extends BaseService implements ICrawlerService{
     private String savePathWay = "\\images\\remen\\teshuchanghe\\xiaoye\\makeway\\";
     private String url = "http://www.xiachufang.com/category/51865/?page=";
     private int categoryId = 90;
-    private String footballTeamUrl = "http://www.dongqiudi.com/data?competition=7";
+    private String footballTeamUrl = "http://www.dongqiudi.com/data?competition=51";
     private String footballLogo = "\\images\\logo\\";
+    private String footballTeamRankingUrl = "http://www.dongqiudi.com/data?competition=51";
 
     public void getCategory() {
         List<String> datas = new ArrayList<String>();
@@ -387,53 +389,122 @@ public class CrawlerService extends BaseService implements ICrawlerService{
      * 获取球队的名字和logo
      */
     public void getFootballTeam() {
-        String html = "";
-        try {
-            WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setCssEnabled(false);
-            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-            //模拟浏览器打开一个目标网址
-            HtmlPage rootPage = webClient.getPage(footballTeamUrl);
-            Thread.sleep(2000);//主要是这个线程的等待 因为js加载也是需要时间的
-            html = rootPage.asXml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        String html = "";
+//        try {
+//            WebClient webClient = new WebClient(BrowserVersion.CHROME);
+//            webClient.getOptions().setJavaScriptEnabled(true);
+//            webClient.getOptions().setCssEnabled(false);
+//            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+//            webClient.getOptions().setThrowExceptionOnScriptError(false);
+//            //模拟浏览器打开一个目标网址
+//            HtmlPage rootPage = webClient.getPage(footballTeamUrl);
+//            Thread.sleep(2000);//主要是这个线程的等待 因为js加载也是需要时间的
+//            html = rootPage.asXml();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         Document document;
-        document = Jsoup.parse(html);
-        Element stateDetail = document.select("div#stat_detail").first();
-        Element table = stateDetail.select("table").first();
-        Elements tbody = table.select("tbody");
-        List<FootballTeam> teams = new ArrayList<FootballTeam>();
-        for(int i=0;i<tbody.size();i++){
-            if(i<1){
-                continue;
+        try {
+            document = Jsoup.connect(footballTeamUrl)
+                        .timeout(10000)
+                        .get();
+            Element stateDetail = document.select("div#stat_detail").first();
+            Element table = stateDetail.select("table").first();
+            Element tbody = table.select("tbody").first();
+            Elements trs = tbody.select("tr");
+            List<FootballTeam> teams = new ArrayList<FootballTeam>();
+            for(int i=0;i<trs.size();i++){
+                if(i>1){
+                    Element tr = trs.get(i);
+                    Element td = tr.select("td.team").first();
+                    Element img = td.select("img").first();
+                    String imgUrl = img.attr("src");
+                    System.out.println("下载地址："+imgUrl);
+                    //下载图片
+                    String wayPath = getApplicationPath() + footballLogo;
+                    FileUtil.mkdir(wayPath);
+                    //从url中获取图片名称
+                    URI wayUri = URI.create(imgUrl);
+                    String wayUriPath = wayUri.getPath();
+                    wayUriPath = wayUriPath.substring(wayUriPath.lastIndexOf("/")+1, wayUriPath.length());
+                    System.out.println("储存路径："+wayPath+wayUriPath);
+                    //下载图片
+                    FileUtil.downloadImage(imgUrl, wayPath + wayUriPath);
+                    FootballTeam team = new FootballTeam();
+                    team.setLeagueId(6);
+                    team.setName(td.text());
+                    team.setLogo(footballLogo+wayUriPath);
+                    teams.add(team);
+                }
             }
-            Element tr = tbody.get(i);
-            Element td = tr.select("td.team").first();
-            Element img = td.select("img").first();
-            String imgUrl = img.attr("src");
-            System.out.println("下载地址："+imgUrl);
-            //下载图片
-            String wayPath = getApplicationPath() + footballLogo;
-            FileUtil.mkdir(wayPath);
-            //从url中获取图片名称
-            URI wayUri = URI.create(imgUrl);
-            String wayUriPath = wayUri.getPath().substring(1);
-            System.out.println("储存路径："+wayPath+wayUriPath);
-            //下载图片
-            FileUtil.downloadImage(imgUrl, wayPath + wayUriPath);
-            FootballTeam team = new FootballTeam();
-            team.setLeagueId(1);
-            team.setName(td.text());
-            team.setLogo(footballLogo+wayUriPath);
-            teams.add(team);
+            crawlerDao.insertFootballTeam(teams);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-//        crawlerDao.insertFootballTeam(teams);
+    }
+
+    public void getFootballTeamRanking() {
+        Document document;
+        try {
+            document = Jsoup.connect(footballTeamRankingUrl)
+                    .timeout(10000)
+                    .get();
+            Element stateDetail = document.select("div#stat_detail").first();
+            Element table = stateDetail.select("table").first();
+            Element tbody = table.select("tbody").first();
+            Elements trs = tbody.select("tr");
+            List<FootballRanking> rankings = new ArrayList<FootballRanking>();
+            for(int i=0;i<trs.size();i++){
+                if(i>1){
+                    FootballRanking ranking = new FootballRanking();
+                    Element tr = trs.get(i);
+                    Element tdTeam = tr.select("td.team").first();
+                    int id = crawlerDao.queryTeamId(tdTeam.text());
+                    System.out.println("球队"+tdTeam.text()+"的id是"+id);
+                    ranking.setTeamId(id);
+                    Elements tds = tr.select("td");
+                    for(int j=0;j<tds.size();j++){
+                        switch (j){
+                            case 0:
+                                ranking.setRanking(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 2:
+                                ranking.setPlays(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 3:
+                                ranking.setWin(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 4:
+                                ranking.setDraw(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 5:
+                                ranking.setLose(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 6:
+                                ranking.setGoal(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 7:
+                                ranking.setConceded(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 8:
+                                ranking.setGoalDifference(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            case 9:
+                                ranking.setPoint(Integer.parseInt(tds.get(j).text()));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    rankings.add(ranking);
+                }
+            }
+            crawlerDao.insertFootballRanking(rankings);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

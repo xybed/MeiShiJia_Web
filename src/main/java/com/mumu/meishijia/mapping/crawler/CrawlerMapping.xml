@@ -37,4 +37,15 @@
             (#{team.leagueId}, #{team.name}, #{team.logo})
         </foreach>
     </insert>
+    <select id="queryTeamId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM football_team WHERE `name`=#{name}
+    </select>
+    <insert id="insertFootballRanking" parameterType="java.util.List">
+        INSERT INTO
+        football_ranking(team_id,ranking,plays,`point`,win,draw,lose,goal,conceded,goal_difference)
+        VALUES
+        <foreach collection="list" item="ranking" index="index" separator=",">
+            (#{ranking.teamId},#{ranking.ranking},#{ranking.plays},#{ranking.point},#{ranking.win},#{ranking.draw},#{ranking.lose},#{ranking.goal},#{ranking.conceded},#{ranking.goalDifference})
+        </foreach>
+    </insert>
 </mapper>
