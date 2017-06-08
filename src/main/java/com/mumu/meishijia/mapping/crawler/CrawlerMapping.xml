@@ -48,4 +48,10 @@
             (#{ranking.teamId},#{ranking.ranking},#{ranking.plays},#{ranking.point},#{ranking.win},#{ranking.draw},#{ranking.lose},#{ranking.goal},#{ranking.conceded},#{ranking.goalDifference})
         </foreach>
     </insert>
+    <select id="queryPath" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.pojo.crawler.ModifyPath">
+        SELECT id,logo FROM football_team WHERE league_id=#{leagueId}
+    </select>
+    <update id="updatePath">
+        UPDATE football_team SET logo=#{logo} WHERE id=#{id}
+    </update>
 </mapper>

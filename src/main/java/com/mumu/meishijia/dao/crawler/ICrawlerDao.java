@@ -1,9 +1,6 @@
 package com.mumu.meishijia.dao.crawler;
 
-import com.mumu.meishijia.pojo.crawler.Food;
-import com.mumu.meishijia.pojo.crawler.FoodCategory;
-import com.mumu.meishijia.pojo.crawler.FootballRanking;
-import com.mumu.meishijia.pojo.crawler.FootballTeam;
+import com.mumu.meishijia.pojo.crawler.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +17,6 @@ public interface ICrawlerDao {
     void insertFootballTeam(List<FootballTeam> teams);
     int queryTeamId(String name);
     void insertFootballRanking(List<FootballRanking> rankings);
+    List<ModifyPath> queryPath(int leagueId);
+    void updatePath(ModifyPath modifyPath);
 }

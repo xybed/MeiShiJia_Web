@@ -1,15 +1,10 @@
 package com.mumu.meishijia.service.crawler;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.gson.Gson;
 import com.mumu.meishijia.dao.crawler.ICrawlerDao;
 import com.mumu.meishijia.pojo.crawler.*;
 import com.mumu.meishijia.service.BaseService;
 import lib.utils.FileUtil;
-import lib.utils.NumberUtil;
 import lib.utils.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -505,6 +500,17 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             crawlerDao.insertFootballRanking(rankings);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 修改数据库中的图片路径，把“\”换成“/”
+     */
+    public void modifyPath(int leagueId) {
+        List<ModifyPath> pathList = crawlerDao.queryPath(leagueId);
+        for(ModifyPath path : pathList){
+            path.setLogo(path.getLogo().replace("\\", "/").substring(1));
+            crawlerDao.updatePath(path);
         }
     }
 }

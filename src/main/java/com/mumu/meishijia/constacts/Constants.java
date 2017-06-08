@@ -5,5 +5,5 @@ package com.mumu.meishijia.constacts;
  * Created by Administrator on 2017/3/28.
  */
 public class Constants {
-    public static final String BaseUrl = "http://192.168.0.106:8080/meishijia/";
+    public static final String BaseUrl = "http://192.168.0.104:8080/meishijia/";
 }

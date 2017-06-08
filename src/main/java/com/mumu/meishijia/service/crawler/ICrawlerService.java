@@ -9,4 +9,5 @@ public interface ICrawlerService {
     void getAllUrl();
     void getFootballTeam();
     void getFootballTeamRanking();
+    void modifyPath(int leagueId);
 }

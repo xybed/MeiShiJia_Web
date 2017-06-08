@@ -1,0 +1,11 @@
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mumu.meishijia.dao.football.IFootballDao">
+    <select id="queryRanking" parameterType="java.lang.Integer" resultType="com.mumu.meishijia.model.football.RankingModel">
+        SELECT league_id,team_id,ranking,logo,`name`,plays,`point`,win,draw,lose,goal,conceded,goal_difference
+        FROM football_team,football_ranking
+        WHERE football_team.id=football_ranking.team_id AND league_id=#{leagueId}
+        ORDER BY ranking
+    </select>
+</mapper>
