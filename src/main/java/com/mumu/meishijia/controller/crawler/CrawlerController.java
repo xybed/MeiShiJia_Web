@@ -58,4 +58,10 @@ public class CrawlerController extends BaseController{
         int leagueId = NumberUtil.parseInt(request.getParameter("id"), 0);
         crawlerService.modifyPath(leagueId);
     }
+
+    @RequestMapping("/footballPlayer")
+    @ResponseBody
+    public void getFootballPlayer(){
+        crawlerService.getFootballPlayer();
+    }
 }

@@ -1,8 +1,13 @@
 package com.mumu.meishijia.service.crawler;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.gson.Gson;
 import com.mumu.meishijia.dao.crawler.ICrawlerDao;
 import com.mumu.meishijia.pojo.crawler.*;
+import com.mumu.meishijia.pojo.user.User;
 import com.mumu.meishijia.service.BaseService;
 import lib.utils.FileUtil;
 import lib.utils.StringUtil;
@@ -512,5 +517,59 @@ public class CrawlerService extends BaseService implements ICrawlerService{
             path.setLogo(path.getLogo().replace("\\", "/").substring(1));
             crawlerDao.updatePath(path);
         }
+    }
+
+    /**
+     * 获取足球运动员的数据
+     * 从腾讯体育上获取（腾讯唯一值得称赞的地方）
+     * 先获取球员详细信息的链接
+     */
+    public void getFootballPlayer() {
+        getAllPlayerUrl("http://soccer.stats.qq.com/team.htm?t1=186&from=xijia");
+    }
+
+    private void getAllPlayerUrl(String url){
+        String html = "";
+        try {
+            WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            //模拟浏览器打开一个目标网址
+            HtmlPage rootPage = webClient.getPage(url);
+            Thread.sleep(2000);//主要是这个线程的等待 因为js加载也是需要时间的
+            html = rootPage.asXml();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Document document;
+        try {
+            document = Jsoup.parse(html);
+//                    .timeout(10000)
+//                    .get();
+            Element layout = document.select("div.layout").get(4);
+            Element fr = layout.select("div.p-sidebar").first();
+            Element playerMember = fr.select("div.mod-struct").get(1);
+            Element bd = playerMember.select("div.bd").first();
+            Elements divs = bd.select("div.mod-format");
+            for(Element div : divs){
+                Elements lis = div.select("ul.player-list").first().select("li");
+                String urlDetail = lis.select("a").first().attr("href");
+                getPlayerDetail(urlDetail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 根据详情的url去获取球员具体数据
+     * @param url 球员详情的url
+     */
+    private void getPlayerDetail(String url){
+
     }
 }
