@@ -54,4 +54,10 @@
     <update id="updatePath">
         UPDATE football_team SET logo=#{logo} WHERE id=#{id}
     </update>
+    <insert id="insertFootballPlayer" parameterType="com.mumu.meishijia.pojo.crawler.FootballPlayer">
+        INSERT INTO
+        football_player(team_id,`name`,eng_name,`number`,avatar,birthday,nationality,play_position,height,weight)
+        VALUES
+        (#{team_id},#{name},#{eng_name},#{number},#{avatar},#{birthday},#{nationality},#{play_position},#{height},#{weight})
+    </insert>
 </mapper>

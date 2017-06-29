@@ -19,4 +19,5 @@ public interface ICrawlerDao {
     void insertFootballRanking(List<FootballRanking> rankings);
     List<ModifyPath> queryPath(int leagueId);
     void updatePath(ModifyPath modifyPath);
+    void insertFootballPlayer(FootballPlayer player);
 }
